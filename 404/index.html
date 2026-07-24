@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 | You're Lost</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=5">
+  <script>
+    // Prevent FOUC by initializing theme before body rendering
+    let isReload = false;
+    const navEntries = performance.getEntriesByType('navigation');
+    if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+      isReload = true;
+    }
+    let themeColor = sessionStorage.getItem('themeColor');
+    let textColor = sessionStorage.getItem('textColor');
+    if (!themeColor || !textColor || isReload) {
+      const h = Math.floor(Math.random() * 360);
+      const s = Math.floor(50 + Math.random() * 50);
+      let isDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : Math.random() > 0.5;
+      const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
+      themeColor = `hsl(${h}, ${s}%, ${l}%)`;
+      textColor = l > 60 ? '#000000' : '#FFFFFF';
+      sessionStorage.setItem('themeColor', themeColor);
+      sessionStorage.setItem('textColor', textColor);
+    }
+    document.documentElement.style.setProperty('--bg-color', themeColor);
+    document.documentElement.style.setProperty('--text-color', textColor);
+    if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
+  </script>
+</head>
+<body>
+  <div id="status-bar" style="justify-content: center;">
+    <div class="availability-wrapper" id="availability-wrapper">
+      <!-- <span class="handwritten" aria-hidden="true">Un</span> --><span id="freelance-text">Available for Freelance</span>
+    </div>
+  </div>
+  
+  <div class="container">
+    <main>
+      <section style="text-align: center;">
+        <h1 style="font-size: clamp(3rem, 15vw, 10rem); margin-bottom: 0;">404</h1>
+        <p style="font-size: clamp(1.2rem, 3vw, 1.5rem); margin-bottom: 3rem; margin-top: 0; opacity: 0.8;">you look lost, let me help you</p>
+        <div style="display: flex; justify-content: center;">
+          <a href="../" id="back-button">back to home</a>
+        </div>
+        <style>
+          details { margin-top: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; text-align: left; cursor: pointer; }
+          summary { font-size: 1rem; opacity: 0.7; list-style: none; text-decoration: underline; text-underline-offset: 4px; text-align: center; }
+          summary::-webkit-details-marker { display: none; }
+          summary:hover { opacity: 1; }
+          .dropbox { margin-top: 1.5rem; font-size: 1rem; line-height: 1.6; opacity: 0.9; padding: 1.5rem; border: 1px solid currentColor; border-radius: 8px; background: rgba(0,0,0,0.03); }
+          @media (prefers-color-scheme: dark) { .dropbox { background: rgba(255,255,255,0.03); } }
+        </style>
+        <details>
+          <summary>learn more about 404</summary>
+          <div class="dropbox">
+            a 404 error is a standard http status code indicating that the server could not find the requested website page. think of it like a digital dead end. when you click a link or type a url, your browser asks the server for a specific file. if that file has been moved, deleted, or never existed—perhaps due to a typo in the address—the server responds with a 404. it simply means the connection works, but the content doesn't exist. it's the internet's way of saying "i heard you, but i have no idea what you're looking for." don't worry, you can always go back home.
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <div id="announcement-bar">
+    <footer>
+      <a href="../">home</a>
+      <a href="../writing">writing</a>
+      <a href="../who-am-i">who am i</a>
+      <a href="../certificates">certificates</a>
+      <button id="theme-toggle">Re-roll Theme</button>
+    </footer>
+    <div id="live-clock"></div>
+    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
+  </div>
+
+  <script src="../shared.js?v=2"></script>
+</body>
+</html>

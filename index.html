@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://jaival.nfy.fyi/">
+  <title>Jaival Kachiwala</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Jaival Kachiwala is a freelance web developer from Surat, specializing in minimal interfaces, highly-engineered micro-interactions, and brutalist web design.">
+  <meta name="keywords" content="Jaival Kachiwala, Web Developer, Freelance Developer, Surat, Brutalist Web Design, Front-End Developer, Portfolio">
+  <meta name="author" content="Jaival Kachiwala">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jaival Kachiwala | Web Developer">
+  <meta property="og:description" content="Freelance web developer specializing in minimal interfaces and brutalist design.">
+  <meta property="og:site_name" content="Jaival Kachiwala">
+  <meta property="og:image" content="https://jaival.nfy.fyi/og-image.png">
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Jaival Kachiwala | Web Developer">
+  <meta name="twitter:description" content="Freelance web developer specializing in minimal interfaces and brutalist design.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=22">
+  <!-- Theme generation moved to shared.js and initialized immediately -->
+  <script>
+    // Prevent FOUC by initializing theme before body rendering
+    let isReload = false;
+    const navEntries = performance.getEntriesByType('navigation');
+    if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+      isReload = true;
+    }
+    let themeColor = sessionStorage.getItem('themeColor');
+    let textColor = sessionStorage.getItem('textColor');
+    if (!themeColor || !textColor || isReload) {
+      const h = Math.floor(Math.random() * 360);
+      const s = Math.floor(50 + Math.random() * 50);
+      let isDark = Math.random() > 0.5;
+      const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
+      themeColor = `hsl(${h}, ${s}%, ${l}%)`;
+      textColor = l > 60 ? '#000000' : '#FFFFFF';
+      sessionStorage.setItem('themeColor', themeColor);
+      sessionStorage.setItem('textColor', textColor);
+      if (!sessionStorage.getItem('visited')) { document.documentElement.classList.add('initial-load'); }
+      
+      // Fetch and inject SVG for tracing animation
+      fetch('fish_chinese.svg')
+        .then(r => r.text())
+        .then(svgText => {
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+          const svgEl = svgDoc.documentElement;
+          svgEl.classList.add('fish-svg-bg');
+          
+          const inject = () => {
+            document.body.appendChild(svgEl);
+            // Wait for browser layout to calculate length correctly
+            requestAnimationFrame(() => {
+              const paths = Array.from(svgEl.querySelectorAll('path'));
+              const totalPaths = paths.length;
+              paths.forEach((path, i) => {
+                const length = (path.getTotalLength() || 5000) + 10; // Pad to prevent gaps
+                path.style.setProperty('--len', length + 'px');
+                
+                // Stagger delay from 0s to 2s
+                const traceDelay = (i / totalPaths) * 2;
+                
+                // Apply animation dynamically: trace takes 2s, fill waits for 4s total
+                path.style.animation = `trace-fish 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards ${traceDelay}s, fill-fish 0.1s forwards 4s`;
+              });
+            });
+          };
+          
+          if (document.body) inject();
+          else window.addEventListener('DOMContentLoaded', inject);
+        });
+    }
+    document.documentElement.style.setProperty('--bg-color', themeColor);
+    document.documentElement.style.setProperty('--text-color', textColor);
+    if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
+  </script>
+</head>
+<body>
+  
+  <div id="status-bar" style="justify-content: center;">
+    <div class="availability-wrapper" id="availability-wrapper">
+      <!-- <span class="handwritten" aria-hidden="true">Un</span> --><span id="freelance-text">Available for Freelance</span>
+    </div>
+  </div>
+  <div id="announcement-bar">
+    <footer>
+      <a href="#" class="active">home</a>
+      <a href="writing">writing</a>
+      <a href="who-am-i">who am i</a>
+      <a href="certificates">certificates</a>
+      <button id="theme-toggle">Re-roll Theme</button>
+    </footer>
+    <div id="live-clock"></div>
+    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
+  </div>
+  <div class="container">
+    <header>
+      <h1 class="name">Jaival Kachiwala</h1>
+      <!-- Update your bio text below -->
+      <div class="bio">i build websites</div>
+      <div style="margin-top: 1.25rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+        <a href="certificates">certificates</a> <span>- skills acquired</span>
+      </div>
+    </header>
+    
+    <main>
+      <section>
+        <h2 class="section-label">work</h2>
+        <ul class="work-list">
+          <!-- Copy and paste a line below to add a new project -->
+          <li><a href="https://jivannti.com" target="_blank" rel="noopener noreferrer">jivannti.com</a> <span>- e-commerce brand</span></li>
+          <li><a href="https://industrilogik.com" target="_blank" rel="noopener noreferrer">industrilogik.com</a> <span>- B2B SaaS</span></li>
+          <!-- <li><a href="#" target="_blank" rel="noopener noreferrer">your-link.com</a> <span>- project description</span></li> -->
+        </ul>
+      </section>
+      
+      <section>
+        <h2 class="section-label">contact</h2>
+        <ul class="contact-list">
+          <!-- Copy and paste a line below to add another contact method -->
+          <li><a href="mailto:kachiwala@yahoo.com">kachiwala@yahoo.com</a></li>
+          <!-- <li><a href="#" target="_blank" rel="noopener noreferrer">twitter</a></li> -->
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script src="shared.js?v=6"></script>
+</body>
+</html>

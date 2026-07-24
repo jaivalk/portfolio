@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://jaival.nfy.fyi/who-am-i/">
+  <title>Who Am I | Jaival Kachiwala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=5">
+  <!-- Theme generation moved to shared.js and initialized immediately -->
+  <script>
+    // Prevent FOUC by initializing theme before body rendering
+    let isReload = false;
+    const navEntries = performance.getEntriesByType('navigation');
+    if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+      isReload = true;
+    }
+    let themeColor = sessionStorage.getItem('themeColor');
+    let textColor = sessionStorage.getItem('textColor');
+    if (!themeColor || !textColor || isReload) {
+      const h = Math.floor(Math.random() * 360);
+      const s = Math.floor(50 + Math.random() * 50);
+      let isDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : Math.random() > 0.5;
+      const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
+      themeColor = `hsl(${h}, ${s}%, ${l}%)`;
+      textColor = l > 60 ? '#000000' : '#FFFFFF';
+      sessionStorage.setItem('themeColor', themeColor);
+      sessionStorage.setItem('textColor', textColor);
+    }
+    document.documentElement.style.setProperty('--bg-color', themeColor);
+    document.documentElement.style.setProperty('--text-color', textColor);
+    if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
+  </script>
+  <style>
+    .container {
+      width: 60%;
+      max-width: none;
+      align-items: flex-start;
+      text-align: left;
+    }
+    @media (max-width: 768px) {
+      .container { width: 100%; }
+    }
+    .monotonous-text {
+      white-space: pre-wrap;
+      width: 100%;
+      line-height: 1.5;
+    }
+    
+    .scroll-wrapper {
+      max-height: calc(100vh - 11.5rem);
+      overflow-y: auto;
+      padding: 3rem 0;
+      width: 100%;
+      mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    .scroll-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="status-bar" style="justify-content: center;">
+    <div class="availability-wrapper" id="availability-wrapper">
+      <!-- <span class="handwritten" aria-hidden="true">Un</span> --><span id="freelance-text">Available for Freelance</span>
+    </div>
+  </div>
+  <div id="announcement-bar">
+    <footer>
+      <a href="../">home</a>
+      <a href="../writing">writing</a>
+      <a href="#" class="active">who am i</a>
+      <a href="../certificates">certificates</a>
+      <button id="theme-toggle">Re-roll Theme</button>
+    </footer>
+    <div id="live-clock"></div>
+    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
+  </div>
+  
+  <div class="container how-i-use-ai-container">
+    <div class="scroll-wrapper">
+      <h1 style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 400;">who am i</h1>
+      <div class="monotonous-text">hey, i'm jaival.
+
+i build things on the internet. i'm currently based in surat, and i spend an unhealthy amount of time obsessing over the physics of web interactions.
+
+i'm a developer who cares a lot more about how a site feels than how many frameworks are stuffed into the backend. i believe in shipping fast, cutting out the noise, and making things look unapologetically raw.
+
+i'm basically self-taught, heavily relying on curiosity and ai to bridge the gap between an idea in my head and a live website. 
+
+if you need someone to build something minimal, fast, and completely custom from the ground up, let's talk.
+
+<a href="mailto:kachiwala@yahoo.com">kachiwala@yahoo.com</a></div>
+      <div style="margin-top: 4rem; width: 100%; display: flex; justify-content: center; padding-bottom: 2rem;">
+        <a href="../" id="back-button">back to home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared.js?v=2"></script>
+</body>
+</html>
