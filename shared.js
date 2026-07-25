@@ -336,8 +336,7 @@ function createGlobalLoader() {
         const enterBtn = document.createElement('button');
         enterBtn.textContent = 'entry';
         Object.assign(enterBtn.style, {
-            position: 'absolute',
-            bottom: '2rem',
+            position: 'relative',
             padding: '12px 36px',
             borderRadius: '50px',
             backgroundColor: 'transparent',
@@ -373,8 +372,7 @@ function createGlobalLoader() {
         const nameText = document.createElement('div');
         nameText.textContent = "Jaival Kachiwala";
         Object.assign(nameText.style, {
-            position: 'absolute',
-            top: '2rem',
+            position: 'relative',
             fontFamily: "'Ballet', cursive",
             fontSize: 'clamp(3.25rem, 9vw, 4rem)',
             fontWeight: '400',
@@ -401,10 +399,7 @@ function createGlobalLoader() {
         const noteText = document.createElement('div');
         noteText.textContent = notes[currentNoteIndex];
         Object.assign(noteText.style, {
-            position: 'absolute',
-            bottom: '5.5rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
+            position: 'relative',
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: '0.85rem',
             color: '#000000',
@@ -412,8 +407,7 @@ function createGlobalLoader() {
             filter: 'blur(10px)',
             transition: 'all 0.6s ease',
             pointerEvents: 'none',
-            textAlign: 'center',
-            width: '100%'
+            textAlign: 'center'
         });
 
         const fishBg = document.createElement('img');
@@ -426,8 +420,8 @@ function createGlobalLoader() {
         });
 
         greetingWrapper.appendChild(nameText);
-        greetingWrapper.appendChild(enterBtn);
         greetingWrapper.appendChild(noteText);
+        greetingWrapper.appendChild(enterBtn);
         greetingWrapper.appendChild(loadingText);
         
         let noteInterval;
