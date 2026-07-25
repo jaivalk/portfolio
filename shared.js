@@ -569,15 +569,15 @@ async function fetchArtworkWithFallbacks() {
     // 1. Try Met Museum (Sequential)
     try {
         let objectIds = null;
-        const cachedIds = localStorage.getItem('siteMetObjectIdsV5');
+        const cachedIds = localStorage.getItem('siteMetObjectIdsNatureV1');
         if (cachedIds) {
             objectIds = JSON.parse(cachedIds);
         } else {
-            const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=oil%20landscape');
+            const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=nature%20landscape');
             const searchData = await searchRes.json();
             objectIds = searchData.objectIDs;
             if (objectIds && objectIds.length > 0) {
-                localStorage.setItem('siteMetObjectIdsV5', JSON.stringify(objectIds));
+                localStorage.setItem('siteMetObjectIdsNatureV1', JSON.stringify(objectIds));
             }
         }
         if (objectIds && objectIds.length > 0) {
@@ -599,7 +599,7 @@ async function fetchArtworkWithFallbacks() {
     
     // 2. Try Cleveland Museum of Art (Highly reliable, no CORS issues usually)
     try {
-        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=oil%20landscape&has_image=1&limit=20&skip=${Math.floor(Math.random()*100)}`);
+        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=nature%20landscape&has_image=1&limit=20&skip=${Math.floor(Math.random()*100)}`);
         const data = await res.json();
         if (data && data.data && data.data.length > 0) {
             const art = data.data[Math.floor(Math.random() * data.data.length)];
