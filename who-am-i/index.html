@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css?v=5">
   <!-- Theme generation moved to shared.js and initialized immediately -->
   <script>
@@ -59,26 +59,31 @@ document.documentElement.style.setProperty('--text-color', '#F3E5AB');
   </style>
 </head>
 <body>
-  <div id="status-bar" style="justify-content: center;">
-    <div class="availability-wrapper" id="availability-wrapper">
-      <!-- <span class="handwritten" aria-hidden="true">Un</span> --><span id="freelance-text">Available for Freelance</span>
-    </div>
-  </div>
   <div id="announcement-bar">
     <footer>
-      <a href="/">home</a>
+      <a href="/home">home</a>
       <a href="/writing">writing</a>
       <a href="/who-am-i" class="active">who am i</a>
       <a href="/certificates">certificates</a>
       <a href="/art">art</a>
     </footer>
-    <div id="live-clock"></div>
-    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
+                <div class="marquee-container">
+      <div class="marquee-content">
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+      </div>
+    </div>
   </div>
   
   <div class="container how-i-use-ai-container">
     <div class="scroll-wrapper">
-      <h1 style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 400;">who am i</h1>
+      <h1 class="name" style="display: block; text-align: center; margin-bottom: 2rem;">who am i</h1>
       <div class="monotonous-text">hey, i'm jaival.
 
 i build things on the internet. i'm currently based in surat, and i spend an unhealthy amount of time obsessing over the physics of web interactions.
@@ -93,7 +98,7 @@ if you need someone to build something minimal, fast, and completely custom from
 
 <a href="mailto:kachiwala@yahoo.com">kachiwala@yahoo.com</a></div>
       <div style="margin-top: 4rem; width: 100%; display: flex; justify-content: center; padding-bottom: 2rem;">
-        <a href="../" id="back-button">back to home</a>
+        <a href="/home" id="back-button">back to home</a>
       </div>
     </div>
   </div>

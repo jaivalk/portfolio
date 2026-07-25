@@ -1,15 +1,3 @@
-// ── Layout Updater ──
-function updateLayout() {
-    const topBar = document.getElementById('status-bar');
-    const bottomBar = document.getElementById('announcement-bar');
-    const container = document.querySelector('.container');
-    if (topBar && bottomBar && container) {
-        container.style.paddingTop = topBar.offsetHeight + 'px';
-        container.style.paddingBottom = bottomBar.offsetHeight + 'px';
-    }
-}
-window.addEventListener('resize', updateLayout);
-updateLayout();
 
 // ── Theme Generation & Contrast ──
 function getContrastColor(h, s, l) {
@@ -137,204 +125,6 @@ window.addEventListener('load', () => {
 });
 
 // ── Live Clock & Weather ──
-let currentWeatherStr = sessionStorage.getItem('weatherStr') || '';
-
-function fetchWeather() {
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=21.1702&longitude=72.8311&current_weather=true')
-        .then(r => r.json())
-        .then(data => {
-            if (!data || !data.current_weather) return;
-            const code = data.current_weather.weathercode;
-            const temp = Math.round(data.current_weather.temperature);
-            
-            // WMO Weather Codes for rain/drizzle/thunderstorm
-            const rainCodes = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99];
-            
-            const getSvg = (type) => {
-                const b = `<svg width="1.1em" height="1.1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin: 0 0.1rem;">`;
-                if(type==='sun') return `${b}<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`;
-                if(type==='cloud') return `${b}<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`;
-                if(type==='rain') return `${b}<path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>`;
-                return `${b}<path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93 4.93 19.07"/><path d="M15 5l-3 3-3-3M19 9l-3 3 3 3M9 19l3-3 3 3M5 15l3-3-3-3"/></svg>`; // snow
-            };
-
-            if (rainCodes.includes(code)) {
-                currentWeatherStr = ` \u2022 ${getSvg('rain')} ${temp}\u00B0C`;
-                makeItRain();
-            } else {
-                let type = 'cloud';
-                if (code === 0 || code === 1) type = 'sun';
-                else if (code >= 71 && code <= 86) type = 'snow';
-                currentWeatherStr = ` \u2022 ${getSvg(type)} ${temp}\u00B0C`;
-                stopRain();
-            }
-            
-            // Save string so it's instantly available on next page load
-            sessionStorage.setItem('weatherStr', currentWeatherStr);
-            updateClock();
-        })
-        .catch(() => {});
-}
-
-let rainCanvas = null;
-let rainCtx = null;
-let rainDrops = [];
-let splatters = [];
-let colliders = [];
-let rainAnimFrame = null;
-
-function makeItRain() {
-    if (document.getElementById('rain-canvas')) return;
-    
-    rainCanvas = document.createElement('canvas');
-    rainCanvas.id = 'rain-canvas';
-    rainCanvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;';
-    document.documentElement.appendChild(rainCanvas);
-    rainCtx = rainCanvas.getContext('2d');
-    
-    function resize() {
-        rainCanvas.width = window.innerWidth * window.devicePixelRatio;
-        rainCanvas.height = window.innerHeight * window.devicePixelRatio;
-    }
-    
-    // Call resize immediately so canvas size is correct before drop init
-    resize();
-    window.addEventListener('resize', resize);
-    
-    // Persist rain state between page loads
-    const storedState = sessionStorage.getItem('rainState');
-    if (storedState) {
-        try {
-            rainDrops = JSON.parse(storedState);
-        } catch(e) {}
-        sessionStorage.removeItem('rainState');
-    }
-    
-    // Init drops
-    const numDrops = 60; // Reduced for cleaner aesthetic
-    if (!rainDrops || rainDrops.length === 0 || rainDrops.length !== numDrops) {
-        rainDrops = [];
-        for(let i=0; i<numDrops; i++) {
-            rainDrops.push({
-                x: Math.random() * rainCanvas.width,
-                y: Math.random() * rainCanvas.height,
-                speed: (Math.random() * 12 + 10) * window.devicePixelRatio,
-                length: (Math.random() * 15 + 10) * window.devicePixelRatio
-            });
-        }
-    }
-    
-    window.addEventListener('beforeunload', () => {
-        if (rainDrops && rainDrops.length > 0) {
-            sessionStorage.setItem('rainState', JSON.stringify(rainDrops));
-        } else {
-            sessionStorage.removeItem('rainState');
-        }
-    });
-    
-    function draw() {
-        rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
-        
-        const root = document.documentElement;
-        let color = getComputedStyle(root).getPropertyValue('--text-color').trim();
-        if (!color) color = '#F3E5AB';
-        
-        rainCtx.fillStyle = color;
-        rainCtx.strokeStyle = color;
-        rainCtx.lineWidth = 1 * window.devicePixelRatio;
-        rainCtx.lineCap = 'round';
-        
-        // Draw splatters
-        for(let i = splatters.length - 1; i >= 0; i--) {
-            let s = splatters[i];
-            s.x += s.vx;
-            s.y += s.vy;
-            s.vy += 0.5 * window.devicePixelRatio; // gravity
-            s.life -= 1;
-            
-            rainCtx.globalAlpha = Math.max(0, s.life / 20);
-            rainCtx.beginPath();
-            rainCtx.arc(s.x, s.y, 1.2 * window.devicePixelRatio, 0, Math.PI * 2);
-            rainCtx.fill();
-            
-            if (s.life <= 0) splatters.splice(i, 1);
-        }
-        
-        // Draw drops
-        rainCtx.globalAlpha = 0.4;
-        rainCtx.beginPath();
-        for(let drop of rainDrops) {
-            let nextY = drop.y + drop.speed;
-            
-            // Splash at the bottom of the screen
-            if (nextY > rainCanvas.height) {
-                // Spawn 2-4 tiny splash particles
-                const numSplashes = Math.floor(Math.random() * 3) + 2;
-                for(let k=0; k<numSplashes; k++) {
-                    splatters.push({
-                        x: drop.x,
-                        y: rainCanvas.height,
-                        vx: (Math.random() - 0.5) * 4 * window.devicePixelRatio,
-                        vy: (Math.random() * -4 - 1.5) * window.devicePixelRatio,
-                        life: 10 + Math.random() * 10
-                    });
-                }
-                
-                drop.y = -drop.length - (Math.random() * 100);
-                drop.x = Math.random() * rainCanvas.width;
-            } else {
-                rainCtx.moveTo(drop.x, drop.y);
-                rainCtx.lineTo(drop.x, drop.y + drop.length);
-                drop.y = nextY;
-            }
-        }
-        rainCtx.stroke();
-        rainCtx.globalAlpha = 1.0;
-        
-        rainAnimFrame = requestAnimationFrame(draw);
-    }
-    
-    draw();
-}
-
-function stopRain() {
-    if (rainCanvas) {
-        rainCanvas.remove();
-        rainCanvas = null;
-    }
-    if (rainAnimFrame) {
-        cancelAnimationFrame(rainAnimFrame);
-        rainAnimFrame = null;
-    }
-    rainDrops = [];
-    splatters = [];
-    sessionStorage.removeItem('rainState');
-}
-
-function updateClock() {
-    const now = new Date();
-    const options = { timeZone: 'Asia/Kolkata', hour12: true, hour: '2-digit', minute: '2-digit' };
-    const timeString = now.toLocaleTimeString('en-US', options);
-    const year = now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', year: 'numeric' });
-    const clockEl = document.getElementById('live-clock');
-    if (clockEl) clockEl.innerHTML = `Surat \u2022 ${year} \u2022 ${timeString}${currentWeatherStr}`;
-    
-    const delay = 60000 - (now.getTime() % 60000);
-    setTimeout(updateClock, delay);
-}
-
-// Instantly resume rain if it was running previously to prevent load delay
-if (sessionStorage.getItem('rainState')) {
-    makeItRain();
-}
-
-// Fetch on load and every 30 mins
-fetchWeather();
-setInterval(fetchWeather, 30 * 60 * 1000);
-updateClock();
-
-// Availability text remains static
-
 // -- Page Transition & Prefetching --
 const pageContainer = document.querySelector('.container');
 const backBtn = document.querySelector('#back-button');
@@ -454,17 +244,42 @@ function startGlobalSweep() {
         
         requestAnimationFrame(loaderAnimationLoop);
         
-        // After sweep finishes (2.5s), continue to blur and text
-        // Increased duration to 2.5s to really emphasize the terminal line-by-line block effect
+        // After sweep finishes (2.5s), trigger zoom animation and text reveal
         setTimeout(() => {
+            const greeting = document.getElementById('global-greeting-wrapper');
+            if (greeting) greeting.style.display = 'none';
+            
+            const zoomLayer = document.getElementById('global-artwork-zoom-layer');
+            if (zoomLayer) {
+                zoomLayer.style.opacity = '1';
+                
+                if (globalLoaderState.artworkLayerEl) {
+                    globalLoaderState.artworkLayerEl.style.opacity = '0';
+                }
+                
+                void zoomLayer.offsetWidth; // force reflow
+                
+                zoomLayer.style.transition = 'filter 1.2s cubic-bezier(0.77, 0, 0.175, 1), background-size 1.2s cubic-bezier(0.77, 0, 0.175, 1)';
+                zoomLayer.style.backgroundSize = zoomLayer.dataset.coverSize;
+                zoomLayer.style.backgroundPosition = 'center';
+                zoomLayer.style.filter = 'blur(6px)';
+            }
+            
             if (globalLoaderState.overlayEl) globalLoaderState.overlayEl.style.opacity = '1';
-            document.documentElement.style.setProperty('--text-color', '#F3E5AB', 'important');
+            document.documentElement.style.setProperty('--text-color', '#F3E5AB');
             document.documentElement.classList.add('has-artwork');
             document.documentElement.classList.add('reveal-text');
+            document.documentElement.classList.remove('initial-load');
             
-            if (globalLoaderState.containerEl) {
-                globalLoaderState.containerEl.style.zIndex = '0';
-            }
+            setTimeout(() => {
+                if (globalLoaderState.containerEl) {
+                    globalLoaderState.containerEl.style.zIndex = '0';
+                }
+                const path = window.location.pathname;
+                if (path === '/' || path === '/index.html' || path === '') {
+                    window.location.href = '/home';
+                }
+            }, 1200);
         }, 2500);
     }
 }
@@ -506,11 +321,12 @@ function createGlobalLoader() {
         bgContainer.id = 'global-artwork-bg';
         Object.assign(bgContainer.style, {
             position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-            backgroundColor: '#000000', zIndex: '99999', overflow: 'hidden'
+            backgroundColor: '#F3E5AB', zIndex: '99999', overflow: 'hidden'
         });
         
         // Greeting Layer (z-index: 1)
         const greetingWrapper = document.createElement('div');
+        greetingWrapper.id = 'global-greeting-wrapper';
         Object.assign(greetingWrapper.style, {
             position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -518,13 +334,15 @@ function createGlobalLoader() {
         });
         
         const enterBtn = document.createElement('button');
-        enterBtn.textContent = 'enter';
+        enterBtn.textContent = 'entry';
         Object.assign(enterBtn.style, {
+            position: 'absolute',
+            bottom: '2rem',
             padding: '12px 36px',
             borderRadius: '50px',
             backgroundColor: 'transparent',
-            color: '#F3E5AB',
-            border: '1px solid rgba(243, 229, 171, 0.4)',
+            color: '#000000',
+            border: '1px solid rgba(0, 0, 0, 0.4)',
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: '1rem',
             letterSpacing: '0.1em',
@@ -544,7 +362,7 @@ function createGlobalLoader() {
             fontFamily: "'Bricolage Grotesque', sans-serif",
             fontSize: '0.9rem',
             letterSpacing: '0.1em',
-            color: '#F3E5AB',
+            color: '#000000',
             fontWeight: '400',
             opacity: '0',
             position: 'absolute',
@@ -557,30 +375,45 @@ function createGlobalLoader() {
         Object.assign(nameText.style, {
             position: 'absolute',
             top: '2rem',
-            fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontSize: '0.8rem',
-            letterSpacing: '0.2em',
-            color: 'rgba(243, 229, 171, 0.7)',
-            textTransform: 'uppercase',
+            fontFamily: "'Ballet', cursive",
+            fontSize: 'clamp(3.25rem, 9vw, 4rem)',
+            fontWeight: '400',
+            color: '#000000',
             opacity: '0',
             filter: 'blur(10px)',
             transition: 'all 0.6s ease',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            whiteSpace: 'nowrap'
         });
 
-        const yearText = document.createElement('div');
-        yearText.textContent = "2026";
-        Object.assign(yearText.style, {
+
+
+        const notes = [
+            "welcome to my digital playground.",
+            "a collection of thoughts, code, and visual noise.",
+            "built for those who appreciate the details.",
+            "everything you see here was built entirely from scratch.",
+            "currently available for freelance projects.",
+            "based in Surat."
+        ];
+        
+        let currentNoteIndex = Math.floor(Math.random() * notes.length);
+        const noteText = document.createElement('div');
+        noteText.textContent = notes[currentNoteIndex];
+        Object.assign(noteText.style, {
             position: 'absolute',
-            bottom: '2rem',
+            bottom: '5.5rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
             fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontSize: '0.8rem',
-            letterSpacing: '0.2em',
-            color: 'rgba(243, 229, 171, 0.7)',
+            fontSize: '0.85rem',
+            color: '#000000',
             opacity: '0',
             filter: 'blur(10px)',
             transition: 'all 0.6s ease',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            textAlign: 'center',
+            width: '100%'
         });
 
         const fishBg = document.createElement('img');
@@ -593,14 +426,15 @@ function createGlobalLoader() {
         });
 
         greetingWrapper.appendChild(nameText);
-        greetingWrapper.appendChild(yearText);
         greetingWrapper.appendChild(enterBtn);
+        greetingWrapper.appendChild(noteText);
         greetingWrapper.appendChild(loadingText);
         
+        let noteInterval;
         requestAnimationFrame(() => {
             // Fish fades in first
             setTimeout(() => {
-                fishBg.style.opacity = '0.5';
+                fishBg.style.opacity = '0.15';
                 fishBg.style.filter = 'blur(0px) invert(1) brightness(0.15)';
             }, 100);
 
@@ -612,32 +446,49 @@ function createGlobalLoader() {
                 
                 nameText.style.opacity = '1';
                 nameText.style.filter = 'blur(0px)';
-                
-                yearText.style.opacity = '1';
-                yearText.style.filter = 'blur(0px)';
             }, 2300);
+            
+            setTimeout(() => {
+                noteText.style.opacity = '0.7';
+                noteText.style.filter = 'blur(0px)';
+                
+                noteInterval = setInterval(() => {
+                    noteText.style.opacity = '0';
+                    noteText.style.filter = 'blur(10px)';
+                    
+                    setTimeout(() => {
+                        currentNoteIndex = (currentNoteIndex + 1) % notes.length;
+                        noteText.textContent = notes[currentNoteIndex];
+                        noteText.style.opacity = '0.7';
+                        noteText.style.filter = 'blur(0px)';
+                    }, 600);
+                }, 3500);
+            }, 3000);
         });
 
         enterBtn.onclick = () => {
-            enterBtn.style.opacity = '0';
-            enterBtn.style.filter = 'blur(20px)';
-            enterBtn.style.pointerEvents = 'none';
-            
-            nameText.style.opacity = '0';
-            nameText.style.filter = 'blur(20px)';
-            
-            yearText.style.opacity = '0';
-            yearText.style.filter = 'blur(20px)';
+            if (noteInterval) clearInterval(noteInterval);
+            noteText.style.opacity = '0';
+            noteText.style.filter = 'blur(20px)';
             
             setTimeout(() => {
-                loadingText.style.opacity = '1';
-                resolveLoader();
+                enterBtn.style.opacity = '0';
+                enterBtn.style.filter = 'blur(20px)';
+                enterBtn.style.pointerEvents = 'none';
+                
+                nameText.style.opacity = '0';
+                nameText.style.filter = 'blur(20px)';
                 
                 setTimeout(() => {
-                    globalLoaderState.minTimePassed = true;
-                    startGlobalSweep();
-                }, 350);
-            }, 600);
+                    loadingText.style.opacity = '1';
+                    resolveLoader();
+                    
+                    setTimeout(() => {
+                        globalLoaderState.minTimePassed = true;
+                        startGlobalSweep();
+                    }, 350);
+                }, 600);
+            }, 400);
         };
         
         bgContainer.appendChild(fishBg);
@@ -648,8 +499,8 @@ function createGlobalLoader() {
         Object.assign(artworkLayer.style, {
             position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
             zIndex: '2', display: 'grid', pointerEvents: 'none',
-            filter: 'blur(6px)',
-            transform: 'scale(1.03)'
+            filter: 'blur(0px)',
+            transform: 'scale(1)'
         });
         
         const cols = 40;
@@ -662,10 +513,9 @@ function createGlobalLoader() {
         for(let i = 0; i < total; i++) {
             const cell = document.createElement('div');
             
-            // Fix sub-pixel gaps by scaling slightly; black bg makes sweep visible
-            cell.style.transform = 'scale(1.05)';
             cell.style.opacity = '0';
-            cell.style.backgroundColor = '#000';
+            cell.style.backgroundColor = 'transparent';
+            cell.style.backgroundRepeat = 'no-repeat';
             cell.style.transition = 'opacity 0.1s ease';
             
             artworkLayer.appendChild(cell);
@@ -674,13 +524,23 @@ function createGlobalLoader() {
         
         bgContainer.appendChild(artworkLayer);
         
-        // Overlay Layer (z-index: 3)
+        // Zoom Layer (z-index: 3)
+        const zoomLayer = document.createElement('div');
+        zoomLayer.id = 'global-artwork-zoom-layer';
+        Object.assign(zoomLayer.style, {
+            position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
+            zIndex: '3', pointerEvents: 'none', backgroundRepeat: 'no-repeat',
+            opacity: '0', filter: 'blur(0px)'
+        });
+        bgContainer.appendChild(zoomLayer);
+        
+        // Overlay Layer (z-index: 4)
         let bgOverlay = document.createElement('div');
         bgOverlay.id = 'global-artwork-overlay';
         Object.assign(bgOverlay.style, {
             position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.35)', opacity: '0', transition: 'opacity 1s ease-in-out',
-            zIndex: '3', pointerEvents: 'none'
+            zIndex: '4', pointerEvents: 'none'
         });
         bgContainer.appendChild(bgOverlay);
         
@@ -788,7 +648,10 @@ async function initArtworkBackground() {
     const isInitialLoad = (document.documentElement.classList.contains('initial-load') || isReload) && isRoot;
     
     if (!isRoot) {
-        document.documentElement.classList.remove('initial-load');
+        document.documentElement.classList.add('reveal-text');
+        setTimeout(() => {
+            document.documentElement.classList.remove('initial-load');
+        }, 2000);
     }
     
     if (isInitialLoad) {
@@ -832,17 +695,39 @@ async function initArtworkBackground() {
                     const screenH = window.innerHeight;
                     const screenAspect = screenW / screenH;
                     
-                    let bgW, bgH;
+                    // Cover math (Target)
+                    let coverW, coverH;
                     if (screenAspect > aspect) {
-                        bgW = screenW;
-                        bgH = screenW / aspect;
+                        coverW = screenW;
+                        coverH = screenW / aspect;
                     } else {
-                        bgH = screenH;
-                        bgW = screenH * aspect;
+                        coverH = screenH;
+                        coverW = screenH * aspect;
                     }
+                    const coverOffsetX = (coverW - screenW) / 2;
+                    const coverOffsetY = (coverH - screenH) / 2;
+
+                    // Contain math (Initial)
+                    const maxH = screenH * 0.55;
+                    const maxW = screenW;
+                    let containW, containH;
+                    if (maxW / maxH > aspect) {
+                        containH = maxH;
+                        containW = maxH * aspect;
+                    } else {
+                        containW = maxW;
+                        containH = maxW / aspect;
+                    }
+                    const containOffsetX = (containW - screenW) / 2;
+                    const containOffsetY = (containH - screenH) / 2;
                     
-                    const offsetX = (bgW - screenW) / 2;
-                    const offsetY = (bgH - screenH) / 2;
+                    const zoomLayer = document.getElementById('global-artwork-zoom-layer');
+                    if (zoomLayer) {
+                        zoomLayer.style.backgroundImage = `url('${url}')`;
+                        zoomLayer.style.backgroundSize = `${containW}px ${containH}px`;
+                        zoomLayer.style.backgroundPosition = 'center';
+                        zoomLayer.dataset.coverSize = `${coverW}px ${coverH}px`;
+                    }
                     
                     const cols = 40;
                     const rows = 30;
@@ -855,8 +740,9 @@ async function initArtworkBackground() {
                         const cellTop = (r / rows) * screenH;
                         
                         cell.style.backgroundImage = `url('${url}')`;
-                        cell.style.backgroundSize = `${bgW}px ${bgH}px`;
-                        cell.style.backgroundPosition = `-${cellLeft + offsetX}px -${cellTop + offsetY}px`;
+                        cell.style.backgroundRepeat = 'no-repeat';
+                        cell.style.backgroundSize = `${containW}px ${containH}px`;
+                        cell.style.backgroundPosition = `${-(cellLeft + containOffsetX)}px ${-(cellTop + containOffsetY)}px`;
                     });
                     
                     globalLoaderState.isImageReady = true;
@@ -893,6 +779,7 @@ function setupArtworkBackground(imageUrl, isCached) {
         Object.assign(bgContainer.style, {
             position: 'fixed',
             top: '0', left: '0', width: '100vw', height: '100vh',
+            backgroundColor: '#FFFFFF',
             backgroundImage: `url('${imageUrl}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -916,16 +803,17 @@ function setupArtworkBackground(imageUrl, isCached) {
     } else {
         // If it was already set up via the loader, we just need to ensure opacity is 1
         // and we might need to set the background if it wasn't set.
+        const zoomLayer = document.getElementById('global-artwork-zoom-layer');
+        if (zoomLayer) {
+            zoomLayer.style.backgroundImage = `url('${imageUrl}')`;
+            zoomLayer.style.backgroundSize = 'cover';
+            zoomLayer.style.backgroundPosition = 'center';
+            zoomLayer.style.filter = 'blur(6px)';
+            zoomLayer.style.opacity = '1';
+        }
+        
         if (globalLoaderState && globalLoaderState.artworkLayerEl) {
-            if (globalLoaderState.cells && globalLoaderState.cells.length > 0) {
-                globalLoaderState.cells.forEach(cell => {
-                    cell.style.backgroundImage = `url('${imageUrl}')`;
-                    cell.style.opacity = '1';
-                });
-            } else {
-                globalLoaderState.artworkLayerEl.style.backgroundImage = `url('${imageUrl}')`;
-                globalLoaderState.artworkLayerEl.style.clipPath = 'inset(0 0 0 0)';
-            }
+            globalLoaderState.artworkLayerEl.style.opacity = '0';
         } else {
             bgContainer.style.backgroundImage = `url('${imageUrl}')`;
         }
@@ -933,7 +821,7 @@ function setupArtworkBackground(imageUrl, isCached) {
         if(bgOverlay) bgOverlay.style.opacity = '1';
     }
     
-    document.documentElement.style.setProperty('--text-color', '#F3E5AB', 'important');
+    document.documentElement.style.setProperty('--text-color', '#F3E5AB');
     document.documentElement.classList.add('has-artwork');
     
     if (!document.getElementById('kill-fish-style')) {
@@ -997,7 +885,8 @@ initArtworkBackground();
     let scoreEl = null;
     
     const gridSize = 8;
-    const BASE_COLOR = '#F3E5AB';
+    const isRootPage = window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname === '';
+    const getBaseColor = () => isRootPage ? '#000000' : (getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim() || '#F3E5AB');
 
     const randColor = () => `hsl(${Math.random() * 360 | 0}, 90%, 65%)`;
 
@@ -1016,7 +905,7 @@ initArtworkBackground();
     };
 
     // Init favicon with base color
-    updateFavicon(BASE_COLOR);
+    updateFavicon(getBaseColor());
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Control') {
@@ -1049,15 +938,15 @@ initArtworkBackground();
     document.addEventListener('keyup', (e) => {
         if (e.key === 'Control') {
             isCtrlDown = false;
-            if (!isOverLink) activeSquare.style.backgroundColor = BASE_COLOR;
-            updateFavicon(BASE_COLOR);
+            if (!isOverLink) activeSquare.style.backgroundColor = getBaseColor();
+            updateFavicon(getBaseColor());
         }
     });
     // Reset if window loses focus while Ctrl held
     window.addEventListener('blur', () => {
         isCtrlDown = false;
-        if (!isOverLink && !isSnakeMode) activeSquare.style.backgroundColor = BASE_COLOR;
-        updateFavicon(BASE_COLOR);
+        if (!isOverLink && !isSnakeMode) activeSquare.style.backgroundColor = getBaseColor();
+        updateFavicon(getBaseColor());
     });
 
     const PIXEL_FONT = {
@@ -1219,7 +1108,7 @@ initArtworkBackground();
         activeSquare.style.backgroundColor = 'red';
         activeSquare.style.width = '8px';
         activeSquare.style.height = '8px';
-        setTimeout(() => activeSquare.style.backgroundColor = BASE_COLOR, 500);
+        setTimeout(() => activeSquare.style.backgroundColor = getBaseColor(), 500);
     }
 
 
@@ -1230,7 +1119,7 @@ initArtworkBackground();
         position: 'fixed',
         width: '8px',
         height: '8px',
-        backgroundColor: '#F3E5AB',
+        backgroundColor: getBaseColor(),
         pointerEvents: 'none',
         zIndex: '2147483647',
         transform: 'translate(-50%, -50%)',
@@ -1286,6 +1175,7 @@ initArtworkBackground();
                 trailSquare.className = 'mouse-trail-square';
                 trailSquare.style.left = (x0 * gridSize + gridSize / 2) + 'px';
                 trailSquare.style.top = (y0 * gridSize + gridSize / 2) + 'px';
+                trailSquare.style.backgroundColor = getBaseColor();
                 if (isCtrlDown) trailSquare.style.backgroundColor = randColor();
                 document.body.appendChild(trailSquare);
                 
@@ -1321,7 +1211,7 @@ initArtworkBackground();
         if (link) {
             isOverLink = true;
             activeSquare.style.backgroundColor = 'transparent';
-            activeSquare.style.border = '1.5px solid #F3E5AB';
+            activeSquare.style.border = `1.5px solid ${getBaseColor()}`;
             activeSquare.style.width = '14px';
             activeSquare.style.height = '14px';
         }
@@ -1331,7 +1221,7 @@ initArtworkBackground();
         const link = e.target.closest('a, button, [role="button"]');
         if (link) {
             isOverLink = false;
-            activeSquare.style.backgroundColor = '#F3E5AB';
+            activeSquare.style.backgroundColor = getBaseColor();
             activeSquare.style.border = 'none';
             activeSquare.style.width = '8px';
             activeSquare.style.height = '8px';
@@ -1369,7 +1259,7 @@ initArtworkBackground();
     let golCenter = {x: 0, y: 0};
     
     document.addEventListener('click', (e) => {
-        if (e.target.closest('a, button, [role="button"]') || isSnakeMode) return;
+        if (!e.ctrlKey || e.target.closest('a, button, [role="button"]') || isSnakeMode) return;
         
         const cx = Math.floor(e.clientX / gridSize);
         const cy = Math.floor(e.clientY / gridSize);
@@ -1592,27 +1482,27 @@ initArtworkBackground();
                     const screenW = window.innerWidth;
                     const screenH = window.innerHeight;
                     const screenAspect = screenW / screenH;
-
-                    let bgW, bgH;
+                    let coverW, coverH;
                     if (screenAspect > aspect) {
-                        bgW = screenW;
-                        bgH = screenW / aspect;
+                        coverW = screenW;
+                        coverH = screenW / aspect;
                     } else {
-                        bgH = screenH;
-                        bgW = screenH * aspect;
+                        coverH = screenH;
+                        coverW = screenH * aspect;
                     }
-
-                    const offsetX = (bgW - screenW) / 2;
-                    const offsetY = (bgH - screenH) / 2;
-
-                    globalLoaderState.cells.forEach((cell, i) => {
-                        const c = i % cols;
-                        const r = Math.floor(i / cols);
-                        const cellLeft = (c / cols) * screenW;
-                        const cellTop = (r / rows) * screenH;
-                        cell.style.backgroundSize = `${bgW}px ${bgH}px`;
-                        cell.style.backgroundPosition = `-${cellLeft + offsetX}px -${cellTop + offsetY}px`;
-                    });
+                    
+                    const coverOffsetX = (coverW - screenW) / 2;
+                    const coverOffsetY = (coverH - screenH) / 2;
+                    
+                    const zoomLayer = document.getElementById('global-artwork-zoom-layer');
+                    if (zoomLayer) {
+                        zoomLayer.dataset.coverSize = `${coverW}px ${coverH}px`;
+                        
+                        if (document.documentElement.classList.contains('has-artwork')) {
+                            zoomLayer.style.backgroundSize = `${coverW}px ${coverH}px`;
+                            zoomLayer.style.backgroundPosition = 'center';
+                        }
+                    }
                 };
                 img.src = globalLoaderState.imageUrl;
             }

@@ -3,6 +3,13 @@
   --text-color: #F3E5AB;
 }
 
+h1.name {
+  font-family: 'Ballet', cursive;
+  font-weight: 400;
+  font-size: clamp(3.25rem, 9vw, 4rem);
+  white-space: nowrap;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -196,13 +203,12 @@ header {
 }
 
 .section-label {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: 'Ballet', cursive;
+  text-transform: capitalize;
+  letter-spacing: normal;
   margin-bottom: 0.75rem;
-  border-bottom: 1px solid var(--text-color);
-  padding-bottom: 0.25rem;
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: 2rem;
   font-weight: 400;
 }
 
@@ -279,6 +285,7 @@ html.has-artwork a:hover, html.has-artwork a.active {
 
 .contact-list li {
   margin-bottom: 0;
+  font-size: 1.25rem;
 }
 
 footer {
@@ -291,6 +298,10 @@ footer {
   gap: 1rem;
   font-size: 0.875rem;
   opacity: 0.8;
+}
+
+footer a, h1 {
+  text-transform: capitalize;
 }
 
 footer a:hover,
@@ -489,7 +500,7 @@ html.initial-load.reveal-text #announcement-bar {
   left: 50%;
   transform: translate(-50%, -50%);
   width: auto;
-  height: 38vh;
+  height: 34vh;
   object-fit: contain;
   z-index: -1;
   pointer-events: none;
@@ -497,7 +508,7 @@ html.initial-load.reveal-text #announcement-bar {
 
 @media (max-width: 768px) {
   .enter-fish-bg {
-    width: 94.5vw;
+    width: 85vw;
     height: auto;
   }
 }
@@ -507,7 +518,7 @@ html.initial-load.reveal-text #announcement-bar {
     position: fixed;
     width: 8px;
     height: 8px;
-    background-color: #F3E5AB;
+    background-color: var(--text-color);
     pointer-events: none;
     z-index: 2147483647;
     transform: translate(-50%, -50%);
@@ -534,4 +545,46 @@ img:not(.enter-fish-bg):not(.fish-svg-bg) {
 }
 img:not(.enter-fish-bg):not(.fish-svg-bg):hover {
   filter: blur(0px) grayscale(0);
+}
+
+/* Marquee Styles */
+.marquee-container {
+  width: 100%;
+  max-width: 550px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+@media (max-width: 768px) {
+  .marquee-container {
+    max-width: 100%;
+  }
+}
+
+.marquee-content {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-content span {
+  display: flex;
+  align-items: center;
+}
+
+.marquee-content span b {
+  margin: 0 1rem;
+  font-size: 1.2rem;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://jaival.nfy.fyi/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&display=swap" rel="stylesheet">
   <title>Jaival Kachiwala</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
@@ -27,8 +30,8 @@
   <meta name="twitter:description" content="Freelance web developer specializing in minimal interfaces and brutalist design.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=22">
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=26">
   <!-- Theme generation moved to shared.js and initialized immediately -->
   <script>
     // Prevent FOUC by initializing theme before body rendering
@@ -49,52 +52,9 @@
 </head>
 <body>
   
-  <div id="status-bar" style="justify-content: center;">
-    <div class="availability-wrapper" id="availability-wrapper">
-      <!-- <span class="handwritten" aria-hidden="true">Un</span> --><span id="freelance-text">Available for Freelance</span>
-    </div>
+  <div id="announcement-bar" style="opacity: 0; pointer-events: none;">
   </div>
-  <div id="announcement-bar">
-    <footer>
-      <a href="#" class="active">home</a>
-      <a href="writing">writing</a>
-      <a href="who-am-i">who am i</a>
-      <a href="certificates">certificates</a>
-      <a href="art">art</a>
-    </footer>
-    <div id="live-clock"></div>
-    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
-  </div>
-  <div class="container">
-    <header>
-      <h1 class="name">Jaival Kachiwala</h1>
-      <!-- Update your bio text below -->
-      <div class="bio">i build websites</div>
-      <div style="margin-top: 1.25rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
-        <a href="certificates">certificates</a> <span>- skills acquired</span>
-      </div>
-    </header>
-    
-    <main>
-      <section>
-        <h2 class="section-label">work</h2>
-        <ul class="work-list">
-          <!-- Copy and paste a line below to add a new project -->
-          <li><a href="https://jivannti.com" target="_blank" rel="noopener noreferrer">jivannti.com</a> <span>- e-commerce brand</span></li>
-          <li><a href="https://industrilogik.com" target="_blank" rel="noopener noreferrer">industrilogik.com</a> <span>- B2B SaaS</span></li>
-          <li>this site <span>- obviously</span></li>
-        </ul>
-      </section>
-      
-      <section>
-        <h2 class="section-label">contact</h2>
-        <ul class="contact-list">
-          <!-- Copy and paste a line below to add another contact method -->
-          <li><a href="mailto:kachiwala@yahoo.com">kachiwala@yahoo.com</a></li>
-          <!-- <li><a href="#" target="_blank" rel="noopener noreferrer">twitter</a></li> -->
-        </ul>
-      </section>
-    </main>
+  <div class="container" style="opacity: 0; pointer-events: none;">
   </div>
   <script src="shared.js?v=7"></script>
 </body>
