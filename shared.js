@@ -334,7 +334,7 @@ function createGlobalLoader() {
         });
         
         const enterBtn = document.createElement('button');
-        enterBtn.textContent = 'Enter';
+        enterBtn.innerHTML = "<span style='position: relative; left: -18px;'>Enter</span>";
         Object.assign(enterBtn.style, {
             position: 'relative',
             padding: '12px 36px',
