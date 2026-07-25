@@ -406,7 +406,12 @@ function createGlobalLoader() {
             filter: 'blur(10px)',
             transition: 'all 0.6s ease',
             pointerEvents: 'none',
-            textAlign: 'center'
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '3rem',
+            width: '90%'
         });
 
         const fishBg = document.createElement('img');
