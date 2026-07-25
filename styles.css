@@ -486,7 +486,6 @@ html.initial-load.reveal-text #announcement-bar {
 .loading-dots {
   display: inline-block;
   overflow: hidden;
-  vertical-align: bottom;
   animation: loadingDots 1.5s steps(4, end) infinite;
   white-space: nowrap;
 }
@@ -495,7 +494,7 @@ html.initial-load.reveal-text #announcement-bar {
 }
 @keyframes loadingDots {
   0% { width: 0; }
-  100% { width: 1.25em; }
+  100% { width: 1.5em; }
 }
 
 .enter-fish-bg {
