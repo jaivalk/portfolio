@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://jaival.nfy.fyi/">
   <title>Jaival Kachiwala</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
   
   <!-- SEO Meta Tags -->
   <meta name="description" content="Jaival Kachiwala is a freelance web developer from Surat, specializing in minimal interfaces, highly-engineered micro-interactions, and brutalist web design.">
@@ -25,7 +27,7 @@
   <meta name="twitter:description" content="Freelance web developer specializing in minimal interfaces and brutalist design.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=22">
   <!-- Theme generation moved to shared.js and initialized immediately -->
   <script>
@@ -35,55 +37,14 @@
     if (navEntries.length > 0 && navEntries[0].type === 'reload') {
       isReload = true;
     }
-    let themeColor = sessionStorage.getItem('themeColor');
-    let textColor = sessionStorage.getItem('textColor');
-    if (!themeColor || !textColor || isReload) {
-      const h = Math.floor(Math.random() * 360);
-      const s = Math.floor(50 + Math.random() * 50);
-      let isDark = Math.random() > 0.5;
-      const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
-      themeColor = `hsl(${h}, ${s}%, ${l}%)`;
-      textColor = l > 60 ? '#000000' : '#FFFFFF';
-      sessionStorage.setItem('themeColor', themeColor);
-      sessionStorage.setItem('textColor', textColor);
-      if (!sessionStorage.getItem('visited')) { document.documentElement.classList.add('initial-load'); }
-      
-      // Fetch and inject SVG for tracing animation
-      fetch('fish_chinese.svg')
-        .then(r => r.text())
-        .then(svgText => {
-          const parser = new DOMParser();
-          const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-          const svgEl = svgDoc.documentElement;
-          svgEl.classList.add('fish-svg-bg');
-          
-          const inject = () => {
-            document.body.appendChild(svgEl);
-            // Wait for browser layout to calculate length correctly
-            requestAnimationFrame(() => {
-              const paths = Array.from(svgEl.querySelectorAll('path'));
-              const totalPaths = paths.length;
-              paths.forEach((path, i) => {
-                const length = (path.getTotalLength() || 5000) + 10; // Pad to prevent gaps
-                path.style.setProperty('--len', length + 'px');
-                
-                // Stagger delay from 0s to 2s
-                const traceDelay = (i / totalPaths) * 2;
-                
-                // Apply animation dynamically: trace takes 2s, fill waits for 4s total
-                path.style.animation = `trace-fish 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards ${traceDelay}s, fill-fish 0.1s forwards 4s`;
-              });
-            });
-          };
-          
-          if (document.body) inject();
-          else window.addEventListener('DOMContentLoaded', inject);
-        });
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+    document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
     }
-    document.documentElement.style.setProperty('--bg-color', themeColor);
-    document.documentElement.style.setProperty('--text-color', textColor);
-    if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
-    if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
   </script>
 </head>
 <body>
@@ -99,7 +60,7 @@
       <a href="writing">writing</a>
       <a href="who-am-i">who am i</a>
       <a href="certificates">certificates</a>
-      <button id="theme-toggle">Re-roll Theme</button>
+      <a href="art">art</a>
     </footer>
     <div id="live-clock"></div>
     <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
@@ -121,7 +82,7 @@
           <!-- Copy and paste a line below to add a new project -->
           <li><a href="https://jivannti.com" target="_blank" rel="noopener noreferrer">jivannti.com</a> <span>- e-commerce brand</span></li>
           <li><a href="https://industrilogik.com" target="_blank" rel="noopener noreferrer">industrilogik.com</a> <span>- B2B SaaS</span></li>
-          <!-- <li><a href="#" target="_blank" rel="noopener noreferrer">your-link.com</a> <span>- project description</span></li> -->
+          <li>this site <span>- obviously</span></li>
         </ul>
       </section>
       
@@ -135,6 +96,6 @@
       </section>
     </main>
   </div>
-  <script src="shared.js?v=6"></script>
+  <script src="shared.js?v=7"></script>
 </body>
 </html>
