@@ -334,7 +334,7 @@ function createGlobalLoader() {
         });
         
         const enterBtn = document.createElement('button');
-        enterBtn.textContent = 'entry';
+        enterBtn.textContent = 'Enter';
         Object.assign(enterBtn.style, {
             position: 'relative',
             padding: '12px 36px',
@@ -342,10 +342,9 @@ function createGlobalLoader() {
             backgroundColor: 'transparent',
             color: '#000000',
             border: '1px solid rgba(0, 0, 0, 0.4)',
-            fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontSize: '1rem',
-            letterSpacing: '0.1em',
-            textTransform: 'lowercase',
+            fontFamily: "'Ballet', cursive",
+            fontSize: '1.75rem',
+            letterSpacing: '0.05em',
             cursor: 'pointer',
             transition: 'all 0.6s ease',
             opacity: '0',
