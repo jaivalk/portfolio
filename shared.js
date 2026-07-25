@@ -334,17 +334,19 @@ function createGlobalLoader() {
         });
         
         const enterBtn = document.createElement('button');
-        enterBtn.innerHTML = "<span style='position: relative; left: -18px;'>Enter</span>";
+        enterBtn.textContent = 'Enter';
         Object.assign(enterBtn.style, {
             position: 'relative',
-            padding: '12px 36px',
+            padding: '12px 42px 12px 18px',
             borderRadius: '50px',
             backgroundColor: 'transparent',
             color: '#000000',
             border: '1px solid rgba(0, 0, 0, 0.4)',
             fontFamily: "'Ballet', cursive",
             fontSize: '1.75rem',
+            lineHeight: '1',
             letterSpacing: '0.05em',
+            overflow: 'visible',
             cursor: 'pointer',
             transition: 'all 0.6s ease',
             opacity: '0',
