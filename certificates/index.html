@@ -9,12 +9,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Certificates | Jaival Kachiwala</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="../styles.css?v=22">
 
@@ -106,13 +107,17 @@ width: calc(33.333% - 2rem);
 }
 
 .cert-card img {
+
 width: 100%;
+
 height: auto;
+
 aspect-ratio: 1.414 / 1;
+
 object-fit: contain;
+
 background-color: transparent;
-border: none !important;
-outline: none !important;
+
 }
 
 .cert-info {
@@ -177,27 +182,16 @@ let isDark = Math.random() > 0.5;
 
 const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
 
-themeColor = `hsl(${h}, ${s}%, ${l}%)`;
-
-textColor = l > 60 ? '#000000' : '#FFFFFF';
-
-sessionStorage.setItem('themeColor', themeColor);
-
-sessionStorage.setItem('textColor', textColor);
-
-if (!sessionStorage.getItem('visited')) { document.documentElement.classList.add('initial-load'); }
-
-}
-
-document.documentElement.style.setProperty('--bg-color', themeColor);
-
-document.documentElement.style.setProperty('--text-color', textColor);
-
-if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
-
-if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
-
-</script>
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+    document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
+    }
+    }
+  </script>
 
 </head>
 
@@ -220,7 +214,7 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
       <a href="../writing">writing</a>
       <a href="../who-am-i">who am i</a>
       <a href="#" class="active">certificates</a>
-      <button id="theme-toggle">Re-roll Theme</button>
+      <a href="/art">art</a>
     </footer>
 
 <div id="live-clock"></div>
@@ -246,7 +240,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 <div class="cert-grid">
 
 <div class="cert-card">
-<img src="media/harvard-cs50x.png" alt="harvard cs50x" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/harvard-cs50x.png" alt="harvard cs50x" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 <div class="cert-info">
 <span class="cert-title">harvard cs50x</span>
 <a href="https://cs50.harvard.edu/certificates/8d24b0a3-3704-41d3-827d-11483139c25a" target="_blank" class="proof-link">proof ↗</a>
@@ -255,7 +252,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/claude-with-the-anthropic-api.jpg" alt="Building with the Claude API" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-with-the-anthropic-api.jpg" alt="Building with the Claude API" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -269,7 +269,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/introduction-to-model-context-protocol.jpg" alt="Introduction to Model Context Protocol" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-model-context-protocol.jpg" alt="Introduction to Model Context Protocol" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -283,7 +286,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/claude-code-in-action.jpg" alt="Claude Code in Action" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-code-in-action.jpg" alt="Claude Code in Action" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -297,7 +303,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/claude-code-101.jpg" alt="Claude Code 101" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-code-101.jpg" alt="Claude Code 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -311,7 +320,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/introduction-to-agent-skills.jpg" alt="Introduction to agent skills" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-agent-skills.jpg" alt="Introduction to agent skills" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -325,7 +337,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/introduction-to-subagents.jpg" alt="Introduction to subagents" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-subagents.jpg" alt="Introduction to subagents" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -339,7 +354,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/claude-platform-101.jpg" alt="Claude Platform 101" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-platform-101.jpg" alt="Claude Platform 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -353,7 +371,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/ai-fluency-ai-capabilities-and-limitations.jpg" alt="AI Capabilities and Limitations" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-ai-capabilities-and-limitations.jpg" alt="AI Capabilities and Limitations" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -367,7 +388,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/ai-fluency-for-builders.jpg" alt="AI Fluency for Builders" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-builders.jpg" alt="AI Fluency for Builders" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -381,7 +405,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/ai-fluency-framework-and-foundations.jpg" alt="AI Fluency: Framework & Foundations" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-framework-and-foundations.jpg" alt="AI Fluency: Framework & Foundations" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -395,7 +422,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/claude-101.jpg" alt="Claude 101" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-101.jpg" alt="Claude 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -409,7 +439,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/introduction-to-claude-cowork.jpg" alt="Introduction to Claude Cowork" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-claude-cowork.jpg" alt="Introduction to Claude Cowork" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -423,7 +456,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/ai-fluency-for-small-businesses.jpg" alt="AI Fluency for Small Businesses" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-small-businesses.jpg" alt="AI Fluency for Small Businesses" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -437,7 +473,10 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 <div class="cert-card">
 
-<img src="media/ai-fluency-for-students.jpg" alt="AI Fluency for students" loading="eager">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-students.jpg" alt="AI Fluency for students" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
 
 <div class="cert-info">
 
@@ -461,12 +500,34 @@ if (sessionStorage.getItem('transitionDirection')) document.documentElement.clas
 
 </div>
 
-</div>
 
+</div>
 </div>
 
 <script src="../shared.js?v=6"></script>
+<script>
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          obs.unobserve(img);
+        }
+      }
+    });
+  }, { rootMargin: '100px' }); // Load slightly before it comes into view
 
+  document.querySelectorAll('.cert-img-wrapper img').forEach(img => {
+    if (img.dataset.src) {
+      observer.observe(img);
+      // Preload in the background
+      const preload = new Image();
+      preload.src = img.dataset.src;
+    }
+  });
+</script>
 </body>
 
 </html>

@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://jaival.nfy.fyi/who-am-i/">
   <title>Who Am I | Jaival Kachiwala</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css?v=5">
   <!-- Theme generation moved to shared.js and initialized immediately -->
   <script>
@@ -17,22 +18,14 @@
     if (navEntries.length > 0 && navEntries[0].type === 'reload') {
       isReload = true;
     }
-    let themeColor = sessionStorage.getItem('themeColor');
-    let textColor = sessionStorage.getItem('textColor');
-    if (!themeColor || !textColor || isReload) {
-      const h = Math.floor(Math.random() * 360);
-      const s = Math.floor(50 + Math.random() * 50);
-      let isDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : Math.random() > 0.5;
-      const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
-      themeColor = `hsl(${h}, ${s}%, ${l}%)`;
-      textColor = l > 60 ? '#000000' : '#FFFFFF';
-      sessionStorage.setItem('themeColor', themeColor);
-      sessionStorage.setItem('textColor', textColor);
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
     }
-    document.documentElement.style.setProperty('--bg-color', themeColor);
-    document.documentElement.style.setProperty('--text-color', textColor);
-    if (sessionStorage.getItem('visited')) document.documentElement.classList.add('has-visited');
-    if (sessionStorage.getItem('transitionDirection')) document.documentElement.classList.add('is-juggling');
   </script>
   <style>
     .container {
@@ -73,11 +66,11 @@
   </div>
   <div id="announcement-bar">
     <footer>
-      <a href="../">home</a>
-      <a href="../writing">writing</a>
-      <a href="#" class="active">who am i</a>
-      <a href="../certificates">certificates</a>
-      <button id="theme-toggle">Re-roll Theme</button>
+      <a href="/">home</a>
+      <a href="/writing">writing</a>
+      <a href="/who-am-i" class="active">who am i</a>
+      <a href="/certificates">certificates</a>
+      <a href="/art">art</a>
     </footer>
     <div id="live-clock"></div>
     <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
@@ -93,6 +86,8 @@ i build things on the internet. i'm currently based in surat, and i spend an unh
 i'm a developer who cares a lot more about how a site feels than how many frameworks are stuffed into the backend. i believe in shipping fast, cutting out the noise, and making things look unapologetically raw.
 
 i'm basically self-taught, heavily relying on curiosity and ai to bridge the gap between an idea in my head and a live website. 
+
+i also like hiding things in plain sight. hold the control key to leave a trail. hit the arrow keys to play snake. click anywhere empty to watch life evolve into a gateway.
 
 if you need someone to build something minimal, fast, and completely custom from the ground up, let's talk.
 

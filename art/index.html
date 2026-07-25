@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://jaival.nfy.fyi/art/">
+  <title>Artwork Details | Jaival Kachiwala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=6">
+  <script>
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+    document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
+    }
+  </script>
+  <style>
+    .container {
+      width: 100%;
+      align-items: center;
+      text-align: center;
+      padding-top: 2rem;
+    }
+    .scroll-wrapper {
+      max-height: calc(100vh - 11.5rem);
+      overflow-y: auto;
+      padding: 3rem 0;
+      width: 100%;
+      mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .scroll-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+    #artwork {
+      max-height: 55vh;
+      max-width: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 1s ease;
+      margin-bottom: 1.5rem;
+    }
+    .details {
+      opacity: 0;
+      transition: opacity 1s ease 0.5s;
+    }
+    .details h1 {
+      font-weight: 400;
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 0.05em;
+      font-family: 'Oranienbaum', serif;
+    }
+    .details p {
+      font-size: 1rem;
+      opacity: 0.7;
+      margin: 0;
+      font-style: italic;
+      font-family: 'Oranienbaum', serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="status-bar" style="justify-content: center;">
+    <div class="availability-wrapper" id="availability-wrapper">
+      <span id="freelance-text">Available for Freelance</span>
+    </div>
+  </div>
+  <div id="announcement-bar">
+    <footer>
+      <a href="/">home</a>
+      <a href="/writing">writing</a>
+      <a href="/who-am-i">who am i</a>
+      <a href="/certificates">certificates</a>
+      <a href="/art" class="active">art</a>
+    </footer>
+    <div id="live-clock"></div>
+    <script>!function(){var n=new Date(),t=n.toLocaleTimeString('en-US',{timeZone:'Asia/Kolkata',hour12:true,hour:'2-digit',minute:'2-digit'}),y=n.toLocaleString('en-US',{timeZone:'Asia/Kolkata',year:'numeric'});document.getElementById('live-clock').textContent='Surat \u2022 '+y+' \u2022 '+t}()</script>
+  </div>
+  
+  <div class="container">
+    <div class="scroll-wrapper">
+      <div id="image-wrapper" style="position: relative; display: flex; justify-content: center; align-items: center; width: 100%; min-height: 300px; margin-bottom: 1.5rem; flex-shrink: 0;">
+          <div id="placeholder" style="position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: filter 0.8s ease, opacity 0.8s ease; filter: blur(0px); opacity: 0.6; z-index: 1;">
+            <div style="width: 250px; height: 250px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: 300;">?</div>
+            <div style="position: absolute; bottom: -30px; font-size: 0.9rem; letter-spacing: 0.1em; font-family: 'Bricolage Grotesque', sans-serif;">loading<span class="loading-dots"></span></div>
+          </div>
+          <img id="artwork" alt="Artwork Details" style="max-height: 55vh; max-width: 100%; object-fit: contain; opacity: 0; filter: blur(20px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2;" loading="eager" crossorigin="anonymous" />
+      </div>
+      <div class="details" style="transition: filter 0.8s ease, opacity 0.8s ease; flex-shrink: 0; padding-bottom: 3rem;">
+          <h1 id="title" style="transition: filter 0.5s ease; filter: blur(0px);">??</h1>
+          <p id="artist" style="transition: filter 0.5s ease; filter: blur(0px); margin-bottom: 1rem; font-size: 1.1rem;">??</p>
+          
+          <div class="metadata" style="font-size: 0.85rem; opacity: 0.8; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.3rem;">
+              <p id="medium" style="margin: 0; transition: filter 0.5s ease; filter: blur(0px);">??</p>
+              <p id="culture" style="margin: 0; transition: filter 0.5s ease; filter: blur(0px);">??</p>
+              <p id="dimensions" style="margin: 0; transition: filter 0.5s ease; filter: blur(0px);">??</p>
+          </div>
+          
+          <div id="art-actions" style="margin-top: 2.5rem; display: flex; gap: 1.5rem; justify-content: center; opacity: 0; transition: opacity 0.8s ease; flex-wrap: wrap;">
+              <a href="../" id="back-button">back to home</a>
+              <a href="#" onclick="event.preventDefault(); location.reload();">discover another</a>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../shared.js?v=8"></script>
+  <script>
+      function applyArtworkData(artworkData) {
+          if (!artworkData) return;
+          const imageUrl = artworkData.primaryImage || artworkData.primaryImageSmall;
+          const finalUrl = `https://wsrv.nl/?url=${encodeURIComponent(imageUrl)}`;
+          const title = artworkData.title || 'Untitled';
+          const artist = artworkData.artistDisplayName ? `${artworkData.artistDisplayName} (${artworkData.objectDate || 'Unknown'})` : 'Unknown Artist';
+          
+          const medium = artworkData.medium || '';
+          const culture = artworkData.culture || '';
+          const dimensions = artworkData.dimensions || '';
+
+          const img = new Image();
+          img.crossOrigin = "Anonymous";
+          img.onload = () => {
+              const placeholder = document.getElementById('placeholder');
+              const artworkEl = document.getElementById('artwork');
+              const titleEl = document.getElementById('title');
+              const artistEl = document.getElementById('artist');
+              const mediumEl = document.getElementById('medium');
+              const cultureEl = document.getElementById('culture');
+              const dimensionsEl = document.getElementById('dimensions');
+              const detailsEl = document.querySelector('.details');
+              const actionsEl = document.getElementById('art-actions');
+              
+              titleEl.style.filter = 'blur(10px)';
+              artistEl.style.filter = 'blur(10px)';
+              mediumEl.style.filter = 'blur(10px)';
+              cultureEl.style.filter = 'blur(10px)';
+              dimensionsEl.style.filter = 'blur(10px)';
+              
+              setTimeout(() => {
+                  titleEl.textContent = title;
+                  artistEl.textContent = artist;
+                  mediumEl.textContent = medium ? `${medium}` : '';
+                  cultureEl.textContent = culture ? `${culture}` : '';
+                  dimensionsEl.textContent = dimensions ? `${dimensions}` : '';
+                  
+                  // Hide fields that are empty
+                  mediumEl.style.display = medium ? 'block' : 'none';
+                  cultureEl.style.display = culture ? 'block' : 'none';
+                  dimensionsEl.style.display = dimensions ? 'block' : 'none';
+                  
+                  placeholder.style.filter = 'blur(20px)';
+                  placeholder.style.opacity = '0';
+                  
+                  artworkEl.src = finalUrl;
+                  artworkEl.style.opacity = '1';
+                  artworkEl.style.filter = 'blur(0px)';
+                  titleEl.style.filter = 'blur(0px)';
+                  artistEl.style.filter = 'blur(0px)';
+                  mediumEl.style.filter = 'blur(0px)';
+                  cultureEl.style.filter = 'blur(0px)';
+                  dimensionsEl.style.filter = 'blur(0px)';
+                  
+                  detailsEl.style.opacity = '1';
+                  if (actionsEl) actionsEl.style.opacity = '1';
+              }, 500);
+          };
+          img.src = finalUrl;
+      }
+
+      window.addEventListener('artworkDataLoaded', (e) => {
+          applyArtworkData(e.detail);
+      });
+
+      // Fallback in case it already loaded
+      let isReload = false;
+      const navEntries = performance.getEntriesByType('navigation');
+      if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+          isReload = true;
+      }
+      
+      if (!isReload) {
+          const stored = sessionStorage.getItem('siteArtworkData');
+          if (stored) {
+              applyArtworkData(JSON.parse(stored));
+          }
+      }
+  </script>
+</body>
+</html>
