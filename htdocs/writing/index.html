@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://jaival.nfy.fyi/writing/">
+  <title>Writing | Jaival Kachiwala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../styles.css?v=5">
+  <script>
+    let isReload = false;
+    const navEntries = performance.getEntriesByType('navigation');
+    if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+      isReload = true;
+    }
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
+    }
+  </script>
+</head>
+<body>
+  <div id="announcement-bar">
+    <footer>
+      <a href="../home">home</a>
+      <a href="../work">work</a>
+      <a href="../writing" class="active">writing</a>
+      <a href="../who-am-i">who am i</a>
+      <a href="../certificates">certificates</a>
+    </footer>
+                <div class="marquee-container">
+      <div class="marquee-content">
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <header>
+      <h1 class="name">writing</h1>
+      <div class="bio">notes and thoughts</div>
+    </header>
+    
+    <main>
+      <section>
+        <ul class="work-list">
+          <li><a href="how-i-use-ai">how i actually use ai</a></li>
+          <li><a href="practical-ai-usage">practical ai usage</a></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="../shared.js?v=2"></script>
+</body>
+</html>

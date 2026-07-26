@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Certificates | Jaival Kachiwala</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../styles.css?v=22">
+
+<style>
+
+/* Certificate Grid Styles */
+
+.certificates-container {
+
+width: 80%;
+
+max-width: none;
+
+}
+
+@media (max-width: 768px) {
+
+.certificates-container { width: 100%; }
+
+}
+
+.scroll-wrapper {
+
+max-height: calc(100vh - 11.5rem);
+
+overflow-y: auto;
+
+padding: 3rem 0;
+
+width: 100%;
+
+mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+-webkit-mask-image: linear-gradient(to bottom, transparent, black 3rem, black calc(100% - 3rem), transparent);
+
+-ms-overflow-style: none;  /* IE and Edge */
+
+scrollbar-width: none;  /* Firefox */
+
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+
+display: none;
+
+}
+
+.cert-grid {
+
+display: flex;
+
+flex-wrap: wrap;
+
+justify-content: center;
+
+gap: 3rem;
+
+margin-top: 2rem;
+
+}
+
+.cert-card {
+
+display: flex;
+
+flex-direction: column;
+
+width: 100%;
+
+}
+
+@media (min-width: 768px) {
+
+.cert-card {
+
+width: calc(50% - 1.5rem);
+
+}
+
+}
+
+@media (min-width: 1024px) {
+
+.cert-card {
+
+width: calc(33.333% - 2rem);
+
+}
+
+}
+
+.cert-card img {
+
+width: 100%;
+
+height: auto;
+
+aspect-ratio: 1.414 / 1;
+
+object-fit: contain;
+
+background-color: transparent;
+
+}
+
+.cert-info {
+
+margin-top: 1rem;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+text-align: center;
+
+gap: 0.2rem;
+
+}
+
+.cert-title {
+
+font-size: 1.1rem;
+
+}
+
+.proof-link {
+
+font-size: 0.9rem;
+
+text-transform: lowercase;
+
+text-decoration: none;
+
+}
+
+</style>
+
+<script>
+
+// Prevent FOUC by initializing theme before body rendering
+
+let isReload = false;
+
+const navEntries = performance.getEntriesByType('navigation');
+
+if (navEntries.length > 0 && navEntries[0].type === 'reload') {
+
+isReload = true;
+
+}
+
+let themeColor = sessionStorage.getItem('themeColor');
+
+let textColor = sessionStorage.getItem('textColor');
+
+if (!themeColor || !textColor || isReload) {
+
+const h = Math.floor(Math.random() * 360);
+
+const s = Math.floor(50 + Math.random() * 50);
+
+let isDark = Math.random() > 0.5;
+
+const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
+
+    document.documentElement.style.setProperty('--bg-color', '#000000');
+    document.documentElement.style.setProperty('--text-color', '#F3E5AB');
+    if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
+    if (sessionStorage.getItem('transitionDirection')) {
+        document.documentElement.classList.add('is-juggling');
+    } else {
+        document.documentElement.classList.add('initial-load');
+    }
+    }
+  </script>
+
+</head>
+
+<body>
+
+<div id="announcement-bar">
+
+<footer>
+      <a href="../home">home</a>
+      <a href="../work">work</a>
+      <a href="../writing">writing</a>
+      <a href="../who-am-i">who am i</a>
+      <a href="#" class="active">certificates</a>
+    </footer>
+
+            <div class="marquee-container">
+      <div class="marquee-content">
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+        <span>Available for freelancing <b>&middot;</b> based in Surat <b>&middot;</b></span>
+      </div>
+    </div>
+
+</div>
+
+<div class="container certificates-container">
+
+<div class="scroll-wrapper">
+
+<header>
+
+<h1 class="name">certificates</h1>
+
+<div class="bio">skills acquired.</div>
+
+</header>
+
+<main>
+
+<div class="cert-grid">
+
+<div class="cert-card">
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/harvard-cs50x.png" alt="harvard cs50x" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+<div class="cert-info">
+<span class="cert-title">harvard cs50x</span>
+<a href="https://cs50.harvard.edu/certificates/8d24b0a3-3704-41d3-827d-11483139c25a" target="_blank" class="proof-link">proof ↗</a>
+</div>
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-with-the-anthropic-api.jpg" alt="Building with the Claude API" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">building with the claude api</span>
+
+<a href="https://verify.skilljar.com/c/3s8uty3kbcy3" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-model-context-protocol.jpg" alt="Introduction to Model Context Protocol" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">introduction to model context protocol</span>
+
+<a href="https://verify.skilljar.com/c/42p27sz8d7sv" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-code-in-action.jpg" alt="Claude Code in Action" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">claude code in action</span>
+
+<a href="https://verify.skilljar.com/c/oaycifvpd85s" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-code-101.jpg" alt="Claude Code 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">claude code 101</span>
+
+<a href="https://verify.skilljar.com/c/dpkscdojedgi" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-agent-skills.jpg" alt="Introduction to agent skills" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">introduction to agent skills</span>
+
+<a href="https://verify.skilljar.com/c/kg9knvwrj9j6" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-subagents.jpg" alt="Introduction to subagents" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">introduction to subagents</span>
+
+<a href="https://verify.skilljar.com/c/kbuumuwspird" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-platform-101.jpg" alt="Claude Platform 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">claude platform 101</span>
+
+<a href="https://verify.skilljar.com/c/bdgmqnkfpqxg" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-ai-capabilities-and-limitations.jpg" alt="AI Capabilities and Limitations" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">ai capabilities and limitations</span>
+
+<a href="https://verify.skilljar.com/c/far8u87ky5fa" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-builders.jpg" alt="AI Fluency for Builders" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">ai fluency for builders</span>
+
+<a href="https://verify.skilljar.com/c/eaxbaiqf6zcv" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-framework-and-foundations.jpg" alt="AI Fluency: Framework & Foundations" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">ai fluency: framework & foundations</span>
+
+<a href="https://verify.skilljar.com/c/eyprerkvqu6g" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/claude-101.jpg" alt="Claude 101" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">claude 101</span>
+
+<a href="https://verify.skilljar.com/c/ns2ecygskako" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/introduction-to-claude-cowork.jpg" alt="Introduction to Claude Cowork" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">introduction to claude cowork</span>
+
+<a href="https://verify.skilljar.com/c/8cyeckqn44cc" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-small-businesses.jpg" alt="AI Fluency for Small Businesses" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">ai fluency for small businesses</span>
+
+<a href="https://verify.skilljar.com/c/iakmzohuuyhv" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+<div class="cert-card">
+
+<div class="cert-img-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; aspect-ratio: 1.414 / 1; width: 100%;">
+  <div class="cert-placeholder" style="position: absolute; width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 300; transition: all 0.5s ease; opacity: 0.6; z-index: 1;">?</div>
+  <img data-src="media/ai-fluency-for-students.jpg" alt="AI Fluency for students" style="opacity: 0; filter: blur(15px); transition: filter 1.2s ease, opacity 1.2s ease; position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain;" onload="this.style.opacity='1'; this.style.filter='blur(0px)'; this.previousElementSibling.style.opacity='0'; this.previousElementSibling.style.transform='scale(0.8)';">
+</div>
+
+<div class="cert-info">
+
+<span class="cert-title">ai fluency for students</span>
+
+<a href="https://verify.skilljar.com/c/hcn6k6px53me" target="_blank" class="proof-link">proof ↗</a>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<div style="margin-top: 4rem; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 2rem; padding-bottom: 2rem;">
+
+<div style="font-size: 1.1rem; opacity: 0.7;">more to acquire...</div>
+
+<a href="../home" id="back-button">back to home</a>
+
+</div>
+
+
+</div>
+</div>
+
+<script src="../shared.js?v=6"></script>
+<script>
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          obs.unobserve(img);
+        }
+      }
+    });
+  }, { rootMargin: '100px' }); // Load slightly before it comes into view
+
+  document.querySelectorAll('.cert-img-wrapper img').forEach(img => {
+    if (img.dataset.src) {
+      observer.observe(img);
+      // Preload in the background
+      const preload = new Image();
+      preload.src = img.dataset.src;
+    }
+  });
+</script>
+</body>
+
+</html>
+

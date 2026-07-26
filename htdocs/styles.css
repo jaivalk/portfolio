@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Geist Pixel Circle';
-  src: url('/geist-font/GeistPixel/webfonts/GeistPixel-Circle.woff2') format('woff2');
+  src: url('geist-font/GeistPixel/webfonts/GeistPixel-Circle.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
