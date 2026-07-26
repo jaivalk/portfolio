@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Geist Pixel Circle';
+  src: url('/geist-font/GeistPixel/webfonts/GeistPixel-Circle.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg-color: #000000;
   --text-color: #F3E5AB;
@@ -14,7 +22,7 @@ h1.name {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Geist Pixel Circle', monospace;
   color: var(--text-color);
   border-radius: 0;
   transition: color 0.3s ease;
@@ -185,7 +193,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.5rem;
 }
 
 .name {
@@ -483,18 +491,34 @@ html.initial-load.reveal-text #announcement-bar {
 }
 
 
-.loading-dots {
+.loading-dot {
   display: inline-block;
-  overflow: hidden;
-  animation: loadingDots 1.5s steps(4, end) infinite;
-  white-space: nowrap;
+  opacity: 0;
 }
-.loading-dots::after {
-  content: "...";
+.dot-1 {
+  animation: dot1Pulse 1.6s infinite;
 }
-@keyframes loadingDots {
-  0% { width: 0; }
-  100% { width: 1.5em; }
+.dot-2 {
+  animation: dot2Pulse 1.6s infinite;
+}
+.dot-3 {
+  animation: dot3Pulse 1.6s infinite;
+}
+
+@keyframes dot1Pulse {
+  0%, 15% { opacity: 0; }
+  25%, 90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes dot2Pulse {
+  0%, 40% { opacity: 0; }
+  50%, 90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes dot3Pulse {
+  0%, 65% { opacity: 0; }
+  75%, 90% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .enter-fish-bg {

@@ -248,6 +248,11 @@ function startGlobalSweep() {
         setTimeout(() => {
             const greeting = document.getElementById('global-greeting-wrapper');
             if (greeting) greeting.style.display = 'none';
+            if (globalLoaderState.containerEl) globalLoaderState.containerEl.style.backgroundColor = '#000000';
+            const rippleEl = document.getElementById('entry-ripple-circle');
+            if (rippleEl && rippleEl.parentNode) rippleEl.parentNode.removeChild(rippleEl);
+            const lTextEl = document.getElementById('terminal-loading-text');
+            if (lTextEl) lTextEl.style.display = 'none';
             
             const zoomLayer = document.getElementById('global-artwork-zoom-layer');
             if (zoomLayer) {
@@ -259,10 +264,11 @@ function startGlobalSweep() {
                 
                 void zoomLayer.offsetWidth; // force reflow
                 
-                zoomLayer.style.transition = 'filter 1.2s cubic-bezier(0.77, 0, 0.175, 1), background-size 1.2s cubic-bezier(0.77, 0, 0.175, 1)';
+                zoomLayer.style.transition = 'filter 1.2s cubic-bezier(0.77, 0, 0.175, 1), background-size 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1)';
                 zoomLayer.style.backgroundSize = zoomLayer.dataset.coverSize;
                 zoomLayer.style.backgroundPosition = 'center';
                 zoomLayer.style.filter = 'blur(6px)';
+                zoomLayer.style.transform = 'scale(1.03)';
             }
             
             if (globalLoaderState.overlayEl) globalLoaderState.overlayEl.style.opacity = '1';
@@ -333,20 +339,17 @@ function createGlobalLoader() {
             gap: '1.2rem', zIndex: '1', overflow: 'hidden', padding: '2rem', boxSizing: 'border-box'
         });
         
-        const enterBtn = document.createElement('button');
-        enterBtn.textContent = 'Enter';
+        const enterBtn = document.createElement('div');
+        enterBtn.textContent = 'click anywhere to enter';
         Object.assign(enterBtn.style, {
             position: 'relative',
-            padding: '12px 36px',
-            borderRadius: '50px',
-            backgroundColor: 'transparent',
+            padding: '8px 20px',
             color: '#000000',
-            border: '1px solid rgba(0, 0, 0, 0.4)',
-            fontFamily: "'Ballet', cursive",
-            fontSize: '1.75rem',
-            letterSpacing: '0.05em',
+            fontFamily: "'Geist Pixel Circle', monospace",
+            fontSize: '0.95rem',
+            letterSpacing: '0.12em',
             cursor: 'pointer',
-            transition: 'all 0.6s ease',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             opacity: '0',
             filter: 'blur(20px)',
             transform: 'scale(0.95)'
@@ -355,18 +358,30 @@ function createGlobalLoader() {
 
 
         const loadingText = document.createElement('div');
-        loadingText.innerHTML = "loading<span class='loading-dots'></span>";
+        loadingText.id = 'terminal-loading-text';
         Object.assign(loadingText.style, {
-            fontFamily: "'Bricolage Grotesque', sans-serif",
-            fontSize: '0.9rem',
-            letterSpacing: '0.1em',
-            color: '#000000',
+            fontFamily: "'Geist Pixel Circle', monospace",
+            fontSize: '1rem',
+            letterSpacing: '0.15em',
+            color: '#F3E5AB',
             fontWeight: '400',
             opacity: '0',
             position: 'absolute',
-            transition: 'opacity 0.6s ease',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: '1',
+            transition: 'opacity 0.4s ease',
             pointerEvents: 'none'
         });
+
+        if (window._dotTimer) clearInterval(window._dotTimer);
+        let dotCount = 0;
+        loadingText.textContent = "loading";
+        window._dotTimer = setInterval(() => {
+            dotCount = (dotCount + 1) % 4;
+            loadingText.textContent = "loading" + ".".repeat(dotCount);
+        }, 350);
 
         const nameText = document.createElement('div');
         nameText.textContent = "Jaival Kachiwala";
@@ -399,7 +414,7 @@ function createGlobalLoader() {
         noteText.textContent = notes[currentNoteIndex];
         Object.assign(noteText.style, {
             position: 'relative',
-            fontFamily: "'Bricolage Grotesque', sans-serif",
+            fontFamily: "'Geist Pixel Circle', monospace",
             fontSize: '0.85rem',
             color: '#000000',
             opacity: '0',
@@ -426,7 +441,6 @@ function createGlobalLoader() {
         greetingWrapper.appendChild(nameText);
         greetingWrapper.appendChild(noteText);
         greetingWrapper.appendChild(enterBtn);
-        greetingWrapper.appendChild(loadingText);
         
         let noteInterval;
         requestAnimationFrame(() => {
@@ -436,7 +450,6 @@ function createGlobalLoader() {
                 fishBg.style.filter = 'blur(0px) invert(1) brightness(0.15)';
             }, 100);
 
-            // Enter button and text fade in after fish fully appears (2s transition + buffer)
             setTimeout(() => {
                 enterBtn.style.opacity = '1';
                 enterBtn.style.filter = 'blur(0px)';
@@ -464,30 +477,74 @@ function createGlobalLoader() {
             }, 3000);
         });
 
-        enterBtn.onclick = () => {
+        enterBtn.onmouseenter = () => {
+            enterBtn.style.transform = 'scale(1.05)';
+            enterBtn.style.opacity = '0.65';
+        };
+        enterBtn.onmouseleave = () => {
+            enterBtn.style.transform = 'scale(1)';
+            enterBtn.style.opacity = '1';
+        };
+
+        let hasEntered = false;
+        const triggerEnter = (e) => {
+            if (hasEntered) return;
+            hasEntered = true;
+            bgContainer.style.cursor = 'default';
             if (noteInterval) clearInterval(noteInterval);
-            noteText.style.opacity = '0';
-            noteText.style.filter = 'blur(20px)';
-            
+
+            const clickX = (e && typeof e.clientX === 'number') ? e.clientX : (window.innerWidth / 2);
+            const clickY = (e && typeof e.clientY === 'number') ? e.clientY : (window.innerHeight / 2);
+            const maxDist = Math.hypot(
+                Math.max(clickX, window.innerWidth - clickX),
+                Math.max(clickY, window.innerHeight - clickY)
+            );
+            const targetDiameter = maxDist * 2.6;
+
+            const ripple = document.createElement('div');
+            ripple.id = 'entry-ripple-circle';
+            Object.assign(ripple.style, {
+                position: 'fixed',
+                top: `${clickY}px`,
+                left: `${clickX}px`,
+                width: `${targetDiameter}px`,
+                height: `${targetDiameter}px`,
+                borderRadius: '50%',
+                backgroundColor: '#000000',
+                boxShadow: '0 0 60px rgba(0, 0, 0, 0.4)',
+                transform: 'translate(-50%, -50%) scale(0)',
+                transformOrigin: 'center center',
+                transition: 'transform 0.7s cubic-bezier(0.77, 0, 0.175, 1)',
+                zIndex: '1',
+                pointerEvents: 'none'
+            });
+            bgContainer.appendChild(ripple);
+            bgContainer.appendChild(loadingText);
+
+            requestAnimationFrame(() => {
+                ripple.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+
             setTimeout(() => {
-                enterBtn.style.opacity = '0';
-                enterBtn.style.filter = 'blur(20px)';
-                enterBtn.style.pointerEvents = 'none';
-                
-                nameText.style.opacity = '0';
-                nameText.style.filter = 'blur(20px)';
+                greetingWrapper.style.opacity = '0';
+                greetingWrapper.style.filter = 'blur(20px)';
+                greetingWrapper.style.pointerEvents = 'none';
+            }, 300);
+
+            setTimeout(() => {
+                bgContainer.style.backgroundColor = '#000000';
+                loadingText.style.opacity = '1';
+                resolveLoader();
                 
                 setTimeout(() => {
-                    loadingText.style.opacity = '1';
-                    resolveLoader();
-                    
-                    setTimeout(() => {
-                        globalLoaderState.minTimePassed = true;
-                        startGlobalSweep();
-                    }, 350);
-                }, 600);
-            }, 400);
+                    globalLoaderState.minTimePassed = true;
+                    startGlobalSweep();
+                }, 350);
+            }, 550);
         };
+
+        bgContainer.style.cursor = 'pointer';
+        bgContainer.addEventListener('click', triggerEnter);
         
         bgContainer.appendChild(fishBg);
         bgContainer.appendChild(greetingWrapper);
@@ -515,6 +572,8 @@ function createGlobalLoader() {
             cell.style.backgroundColor = 'transparent';
             cell.style.backgroundRepeat = 'no-repeat';
             cell.style.transition = 'opacity 0.1s ease';
+            cell.style.transform = 'scale(1.03)';
+            cell.style.margin = '-0.5px';
             
             artworkLayer.appendChild(cell);
             cells.push(cell);
@@ -528,7 +587,7 @@ function createGlobalLoader() {
         Object.assign(zoomLayer.style, {
             position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
             zIndex: '3', pointerEvents: 'none', backgroundRepeat: 'no-repeat',
-            opacity: '0', filter: 'blur(0px)'
+            opacity: '0', filter: 'blur(0px)', transform: 'scale(1)'
         });
         bgContainer.appendChild(zoomLayer);
         
@@ -537,7 +596,7 @@ function createGlobalLoader() {
         bgOverlay.id = 'global-artwork-overlay';
         Object.assign(bgOverlay.style, {
             position: 'absolute', top: '0', left: '0', width: '100%', height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.35)', opacity: '0', transition: 'opacity 1s ease-in-out',
+            backgroundColor: 'rgba(0, 0, 0, 0.45)', opacity: '0', transition: 'opacity 1s ease-in-out',
             zIndex: '4', pointerEvents: 'none'
         });
         bgContainer.appendChild(bgOverlay);
@@ -567,26 +626,29 @@ async function fetchArtworkWithFallbacks() {
     // 1. Try Met Museum (Sequential)
     try {
         let objectIds = null;
-        const cachedIds = localStorage.getItem('siteMetObjectIdsNatureV1');
+        const cachedIds = localStorage.getItem('siteMetObjectIdsOilNatureV1');
         if (cachedIds) {
             objectIds = JSON.parse(cachedIds);
         } else {
-            const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=nature%20landscape');
+            const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=oil%20painting%20nature%20landscape%20scenery');
             const searchData = await searchRes.json();
             objectIds = searchData.objectIDs;
             if (objectIds && objectIds.length > 0) {
-                localStorage.setItem('siteMetObjectIdsNatureV1', JSON.stringify(objectIds));
+                localStorage.setItem('siteMetObjectIdsOilNatureV1', JSON.stringify(objectIds));
             }
         }
         if (objectIds && objectIds.length > 0) {
-            const randomIds = Array.from({length: 5}, () => objectIds[Math.floor(Math.random() * objectIds.length)]);
+            const randomIds = Array.from({length: 10}, () => objectIds[Math.floor(Math.random() * objectIds.length)]);
             for (let id of randomIds) {
                 try {
                     const r = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + id);
                     if (r.status === 403) break; // Rate limited, stop hitting Met
                     const data = await r.json();
                     if (data && (data.primaryImageSmall || data.primaryImage)) {
-                        return data;
+                        const med = (data.medium || '').toLowerCase();
+                        if (med.includes('oil')) {
+                            return data;
+                        }
                     }
                 } catch(e) {}
             }
@@ -597,20 +659,23 @@ async function fetchArtworkWithFallbacks() {
     
     // 2. Try Cleveland Museum of Art (Highly reliable, no CORS issues usually)
     try {
-        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=nature%20landscape&has_image=1&limit=20&skip=${Math.floor(Math.random()*100)}`);
+        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=oil%20painting%20nature%20landscape%20scenery&has_image=1&limit=20&skip=${Math.floor(Math.random()*100)}`);
         const data = await res.json();
         if (data && data.data && data.data.length > 0) {
             const art = data.data[Math.floor(Math.random() * data.data.length)];
             if (art.images && art.images.web && art.images.web.url) {
-                return {
-                    primaryImageSmall: art.images.web.url,
-                    title: art.title,
-                    artistDisplayName: art.creators && art.creators.length > 0 ? art.creators[0].description : 'Unknown Artist',
-                    objectDate: art.creation_date,
-                    medium: art.technique,
-                    culture: art.culture ? art.culture[0] : '',
-                    dimensions: art.measurements
-                };
+                const tech = (art.technique || '').toLowerCase();
+                if (tech.includes('oil')) {
+                    return {
+                        primaryImageSmall: art.images.web.url,
+                        title: art.title,
+                        artistDisplayName: art.creators && art.creators.length > 0 ? art.creators[0].description : 'Unknown Artist',
+                        objectDate: art.creation_date,
+                        medium: art.technique,
+                        culture: art.culture ? art.culture[0] : '',
+                        dimensions: art.measurements
+                    };
+                }
             }
         }
     } catch (e) {
@@ -777,7 +842,7 @@ function setupArtworkBackground(imageUrl, isCached) {
         Object.assign(bgContainer.style, {
             position: 'fixed',
             top: '0', left: '0', width: '100vw', height: '100vh',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#000000',
             backgroundImage: `url('${imageUrl}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -792,7 +857,7 @@ function setupArtworkBackground(imageUrl, isCached) {
         Object.assign(bgOverlay.style, {
             position: 'absolute',
             top: '0', left: '0', width: '100%', height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.35)',
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
             opacity: '1'
         });
         
