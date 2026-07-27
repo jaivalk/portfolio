@@ -158,33 +158,6 @@ text-decoration: none;
 </style>
 
 <script>
-
-// Prevent FOUC by initializing theme before body rendering
-
-let isReload = false;
-
-const navEntries = performance.getEntriesByType('navigation');
-
-if (navEntries.length > 0 && navEntries[0].type === 'reload') {
-
-isReload = true;
-
-}
-
-let themeColor = sessionStorage.getItem('themeColor');
-
-let textColor = sessionStorage.getItem('textColor');
-
-if (!themeColor || !textColor || isReload) {
-
-const h = Math.floor(Math.random() * 360);
-
-const s = Math.floor(50 + Math.random() * 50);
-
-let isDark = Math.random() > 0.5;
-
-const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.random() * 15);
-
     document.documentElement.style.setProperty('--bg-color', '#000000');
     document.documentElement.style.setProperty('--text-color', '#F3E5AB');
     if (sessionStorage.getItem('visited_v2')) document.documentElement.classList.add('has-visited');
@@ -192,7 +165,6 @@ const l = isDark ? Math.floor(5 + Math.random() * 15) : Math.floor(80 + Math.ran
         document.documentElement.classList.add('is-juggling');
     } else {
         document.documentElement.classList.add('initial-load');
-    }
     }
   </script>
 

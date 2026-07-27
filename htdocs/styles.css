@@ -421,37 +421,111 @@ html.initial-load .fish-svg-bg path {
   100% { filter: invert(1) brightness(1) drop-shadow(0 0 0px transparent); opacity: 0.08; transform: scale(0.48); }
 }
 
-/* Hide text initially on first load */
-html.initial-load .container > *,
-html.initial-load #status-bar,
-html.initial-load footer,
-html.initial-load #announcement-bar {
+/* Hide text and UI elements initially on first load */
+html.initial-load .container header > *,
+html.initial-load .container main .section-label,
+html.initial-load .container main li,
+html.initial-load .container main > *:not(section) {
   opacity: 0;
-  filter: blur(10px);
+  filter: blur(16px) brightness(2.2);
+  transform: scale(0.98);
 }
 
-/* When reveal-text is added by JS after image loads, trigger animation */
-html.initial-load.reveal-text .container > * {
-  animation: text-reveal 1.2s cubic-bezier(0.3, 0, 0.1, 1) forwards;
+html.initial-load #status-bar,
+html.initial-load footer a,
+html.initial-load .marquee-container {
+  opacity: 0;
+  filter: blur(14px);
 }
 
-html.initial-load.reveal-text .container > *:nth-child(1) { animation-delay: 0s; }
-html.initial-load.reveal-text .container > *:nth-child(2) { animation-delay: 0.2s; }
-html.initial-load.reveal-text .container > *:nth-child(3) { animation-delay: 0.4s; }
-html.initial-load.reveal-text .container > *:nth-child(4) { animation-delay: 0.6s; }
-html.initial-load.reveal-text .container > *:nth-child(5) { animation-delay: 0.8s; }
+html.initial-load #status-bar,
+html.initial-load footer a {
+  transform: translateY(28px);
+}
+
+/* 1) FIRST: Show the home page details LINE BY LINE smoothly (Bloom + Focus reveal, ZERO vertical slide) */
+html.initial-load.reveal-text .container header > *:nth-child(1) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.15s;
+}
+
+html.initial-load.reveal-text .container header > *:nth-child(2) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.35s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(1) .section-label {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.55s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(1) li:nth-child(1) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.75s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(1) li:nth-child(2) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.95s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(1) li:nth-child(3),
+html.initial-load.reveal-text .container main section:nth-child(1) li:nth-child(n+4) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.15s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(2) .section-label {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.35s;
+}
+
+html.initial-load.reveal-text .container main section:nth-child(2) li:nth-child(1),
+html.initial-load.reveal-text .container main section:nth-child(2) li:nth-child(n+2) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.55s;
+}
+
+/* Fallback for direct main children that aren't sections */
+html.initial-load.reveal-text .container main > *:not(section) {
+  animation: bloom-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.55s;
+}
+
+/* 2) THEN: Smoothly appear the marquee container with ZERO vertical sliding */
+html.initial-load.reveal-text .marquee-container {
+  animation: text-reveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.75s;
+}
+
+/* 3) THEN: Slide in footer links from the bottom ONE BY ONE and set in place */
+html.initial-load.reveal-text footer a:nth-child(1) {
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.10s;
+}
+
+html.initial-load.reveal-text footer a:nth-child(2) {
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.25s;
+}
+
+html.initial-load.reveal-text footer a:nth-child(3) {
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.40s;
+}
+
+html.initial-load.reveal-text footer a:nth-child(4) {
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.55s;
+}
+
+html.initial-load.reveal-text footer a:nth-child(5),
+html.initial-load.reveal-text footer a:nth-child(n+6) {
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.70s;
+}
 
 html.initial-load.reveal-text #status-bar {
-  animation: text-reveal 1.2s cubic-bezier(0.3, 0, 0.1, 1) forwards 1.1s;
+  animation: slide-up-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.85s;
 }
 
-html.initial-load.reveal-text footer, 
-html.initial-load.reveal-text #announcement-bar {
-  animation: text-reveal 1.2s cubic-bezier(0.3, 0, 0.1, 1) forwards 1.1s;
+@keyframes bloom-reveal {
+  0%   { opacity: 0; filter: blur(16px) brightness(2.2); transform: scale(0.98); }
+  100% { opacity: 1; filter: blur(0px) brightness(1); transform: scale(1); }
+}
+
+@keyframes slide-up-reveal {
+  0% { opacity: 0; filter: blur(14px); transform: translateY(28px); }
+  100% { opacity: 1; filter: blur(0px); transform: translateY(0); }
 }
 
 @keyframes text-reveal {
-  0% { opacity: 0; filter: blur(10px); }
+  0% { opacity: 0; filter: blur(14px); }
   100% { opacity: 1; filter: blur(0px); }
 }
 

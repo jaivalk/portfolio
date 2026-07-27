@@ -833,14 +833,31 @@ async function initArtworkBackground() {
         document.documentElement.classList.add('reveal-text');
         setTimeout(() => {
             document.documentElement.classList.remove('initial-load');
-        }, 2000);
+        }, 3500);
     }
     
     if (isInitialLoad) {
         await createGlobalLoader();
     }
     
-    artworkData = await fetchArtworkWithFallbacks();
+    const cachedArtworkJson = sessionStorage.getItem('siteArtworkDataGreenNatureV1');
+    if (cachedArtworkJson && !isInitialLoad) {
+        try {
+            artworkData = JSON.parse(cachedArtworkJson);
+            wasCached = true;
+        } catch (e) {
+            artworkData = null;
+        }
+    }
+    
+    if (!artworkData) {
+        artworkData = await fetchArtworkWithFallbacks();
+        if (artworkData) {
+            try {
+                sessionStorage.setItem('siteArtworkDataGreenNatureV1', JSON.stringify(artworkData));
+            } catch (e) {}
+        }
+    }
     window.currentArtworkData = artworkData;
 
     if (artworkData) {
@@ -1008,6 +1025,19 @@ function setupArtworkBackground(imageUrl, isCached) {
 // Run background init immediately since script is at the bottom of the body
 initArtworkBackground();
 
+// ── Global Marquee Synchronization Across All Pages ──
+(function syncMarqueeAcrossPages() {
+    function applySync() {
+        const marqueeEl = document.querySelector('.marquee-content');
+        if (marqueeEl) {
+            // Marquee loop is 35s (35000ms). Calculate exact continuous offset based on real epoch time.
+            const elapsed = (Date.now() % 35000) / 1000;
+            marqueeEl.style.animationDelay = `-${elapsed.toFixed(3)}s`;
+        }
+    }
+    applySync();
+    document.addEventListener('DOMContentLoaded', applySync);
+})();
 
 // --- FILM GRAIN OVERLAY ---
 (function initGrain() {
