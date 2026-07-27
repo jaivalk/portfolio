@@ -8,7 +8,7 @@ function getContrastColor(h, s, l) {
 function generateTheme(e, init = false) {
     const root = document.documentElement;
     
-    if (sessionStorage.getItem('siteArtworkData')) {
+    if (sessionStorage.getItem('siteArtworkDataGreenNatureV1')) {
         root.style.setProperty('--bg-color', '#000000');
         root.style.setProperty('--text-color', '#F3E5AB');
         return;
@@ -137,13 +137,13 @@ const pageContainer = document.querySelector('.container');
 const backBtn = document.querySelector('#back-button');
 
 let CURRENT_PAGE_INDEX = 0;
-if (window.location.pathname.includes('how-i-use-ai')) CURRENT_PAGE_INDEX = 1.1;
-else if (window.location.pathname.includes('practical-ai-usage')) CURRENT_PAGE_INDEX = 1.2;
-else if (window.location.pathname.includes('/work') || window.location.pathname.endsWith('work')) CURRENT_PAGE_INDEX = 0.5;
-else if (window.location.pathname.includes('/writing/') || window.location.pathname.endsWith('/writing')) CURRENT_PAGE_INDEX = 1;
+if (window.location.pathname.includes('how-i-use-ai')) CURRENT_PAGE_INDEX = 4.1;
+else if (window.location.pathname.includes('practical-ai-usage')) CURRENT_PAGE_INDEX = 4.2;
+else if (window.location.pathname.includes('/work') || window.location.pathname.endsWith('work')) CURRENT_PAGE_INDEX = 1;
+else if (window.location.pathname.includes('/writing/') || window.location.pathname.endsWith('/writing')) CURRENT_PAGE_INDEX = 4;
 else if (window.location.pathname.includes('who-am-i')) CURRENT_PAGE_INDEX = 2;
 else if (window.location.pathname.includes('certificates')) CURRENT_PAGE_INDEX = 3;
-else if (window.location.pathname.includes('/art') || window.location.pathname.endsWith('art')) CURRENT_PAGE_INDEX = 4;
+else if (window.location.pathname.includes('/art') || window.location.pathname.endsWith('art')) CURRENT_PAGE_INDEX = 5;
 
 const transitionDir = sessionStorage.getItem('transitionDirection');
 if (transitionDir) {
@@ -192,13 +192,13 @@ document.querySelectorAll('a').forEach(link => {
         e.preventDefault();
 
         let targetIndex = 0;
-        if (href.includes('how-i-use-ai')) targetIndex = 1.1;
-        else if (href.includes('practical-ai-usage')) targetIndex = 1.2;
+        if (href.includes('how-i-use-ai')) targetIndex = 4.1;
+        else if (href.includes('practical-ai-usage')) targetIndex = 4.2;
         else if (href.includes('who-am-i')) targetIndex = 2;
         else if (href.includes('certificates')) targetIndex = 3;
-        else if (href.includes('/work') || href.endsWith('work')) targetIndex = 0.5;
-        else if (href.includes('/art') || href.endsWith('art')) targetIndex = 4;
-        else if (href.endsWith('writing') || href.endsWith('writing/')) targetIndex = 1;
+        else if (href.includes('/work') || href.endsWith('work')) targetIndex = 1;
+        else if (href.includes('/art') || href.endsWith('art')) targetIndex = 5;
+        else if (href.endsWith('writing') || href.endsWith('writing/')) targetIndex = 4;
 
         // Add overflow class so slide-out is visible
         document.documentElement.classList.add('is-transitioning');
@@ -631,33 +631,71 @@ function createGlobalLoader() {
     });
 }
 
+function isGreenNatureSceneryNoHumans(art) {
+    if (!art) return false;
+    const text = [
+        art.title || '',
+        art.medium || '',
+        art.classification || '',
+        art.technique || '',
+        art.objectName || '',
+        ...(art.tags || []).map(t => typeof t === 'string' ? t : (t.term || '')),
+        ...(art.creators || []).map(c => c.description || '')
+    ].join(' ').toLowerCase();
+
+    // STRICTLY forbid humans, people, portraits, figures, urban/city scenes
+    const forbiddenWords = [
+        'human', 'person', 'people', 'man', 'men', 'woman', 'women', 'girl', 'boy',
+        'child', 'children', 'portrait', 'nude', 'saint', 'madonna', 'christ', 'angel',
+        'soldier', 'figure', 'peasant', 'hunter', 'interior', 'room', 'city', 'street',
+        'crowd', 'battle', 'king', 'queen', 'family', 'dancer', 'actor', 'lady', 'shepherd',
+        'fisherman', 'farmer', 'bather', 'nymph'
+    ];
+    for (let w of forbiddenWords) {
+        const regex = new RegExp('\\b' + w + '\\b', 'i');
+        if (regex.test(text)) return false;
+    }
+
+    // Must be a painting/oil painting
+    const mediumText = ((art.medium || '') + ' ' + (art.technique || '')).toLowerCase();
+    if (!mediumText.includes('oil') && !mediumText.includes('canvas') && !mediumText.includes('painting')) {
+        return false;
+    }
+
+    // Must contain green / nature / landscape / forest / scenery keywords
+    const natureWords = [
+        'nature', 'green', 'landscape', 'forest', 'meadow', 'tree', 'trees', 'scenery',
+        'valley', 'mountain', 'river', 'wood', 'woods', 'woodland', 'grass', 'field',
+        'countryside', 'hill', 'stream', 'lake', 'pasture', 'foliage', 'jungle', 'pond',
+        'cypress', 'poplars', 'pines', 'flora', 'botanical'
+    ];
+    let hasNature = false;
+    for (let nw of natureWords) {
+        const regex = new RegExp('\\b' + nw + '\\b', 'i');
+        if (regex.test(text)) {
+            hasNature = true;
+            break;
+        }
+    }
+    return hasNature;
+}
+
 async function fetchArtworkWithFallbacks() {
     // 1. Try Met Museum (Sequential)
     try {
         let objectIds = null;
-        const cachedIds = localStorage.getItem('siteMetObjectIdsOilNatureV1');
-        if (cachedIds) {
-            objectIds = JSON.parse(cachedIds);
-        } else {
-            const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=oil%20painting%20nature%20landscape%20scenery');
-            const searchData = await searchRes.json();
-            objectIds = searchData.objectIDs;
-            if (objectIds && objectIds.length > 0) {
-                localStorage.setItem('siteMetObjectIdsOilNatureV1', JSON.stringify(objectIds));
-            }
-        }
+        const searchRes = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Paintings&hasImages=true&q=oil%20painting%20green%20landscape%20forest%20trees%20meadow%20nature%20scenery&_nc=' + Date.now(), { cache: 'no-store' });
+        const searchData = await searchRes.json();
+        objectIds = searchData.objectIDs;
         if (objectIds && objectIds.length > 0) {
-            const randomIds = Array.from({length: 10}, () => objectIds[Math.floor(Math.random() * objectIds.length)]);
+            const randomIds = Array.from({length: 15}, () => objectIds[Math.floor(Math.random() * objectIds.length)]);
             for (let id of randomIds) {
                 try {
-                    const r = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + id);
+                    const r = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + id + '?_nc=' + Date.now(), { cache: 'no-store' });
                     if (r.status === 403) break; // Rate limited, stop hitting Met
                     const data = await r.json();
-                    if (data && (data.primaryImageSmall || data.primaryImage)) {
-                        const med = (data.medium || '').toLowerCase();
-                        if (med.includes('oil')) {
-                            return data;
-                        }
+                    if (data && (data.primaryImageSmall || data.primaryImage) && isGreenNatureSceneryNoHumans(data)) {
+                        return data;
                     }
                 } catch(e) {}
             }
@@ -668,19 +706,18 @@ async function fetchArtworkWithFallbacks() {
     
     // 2. Try Cleveland Museum of Art (Highly reliable, no CORS issues usually)
     try {
-        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=oil%20painting%20nature%20landscape%20scenery&has_image=1&limit=20&skip=${Math.floor(Math.random()*100)}`);
+        const res = await fetch(`https://openaccess-api.clevelandart.org/api/artworks/?q=oil%20painting%20green%20landscape%20forest%20trees%20meadow%20nature%20scenery&has_image=1&limit=30&skip=${Math.floor(Math.random()*50)}&_nc=${Date.now()}`, { cache: 'no-store' });
         const data = await res.json();
         if (data && data.data && data.data.length > 0) {
-            const art = data.data[Math.floor(Math.random() * data.data.length)];
-            if (art.images && art.images.web && art.images.web.url) {
-                const tech = (art.technique || '').toLowerCase();
-                if (tech.includes('oil')) {
+            const shuffled = data.data.slice().sort(() => 0.5 - Math.random());
+            for (let art of shuffled) {
+                if (art.images && art.images.web && art.images.web.url && isGreenNatureSceneryNoHumans(art)) {
                     return {
                         primaryImageSmall: art.images.web.url,
                         title: art.title,
                         artistDisplayName: art.creators && art.creators.length > 0 ? art.creators[0].description : 'Unknown Artist',
                         objectDate: art.creation_date,
-                        medium: art.technique,
+                        medium: art.technique || 'Oil on canvas',
                         culture: art.culture ? art.culture[0] : '',
                         dimensions: art.measurements
                     };
@@ -691,21 +728,94 @@ async function fetchArtworkWithFallbacks() {
         console.warn("Cleveland Museum API failed.", e);
     }
 
-    // 3. Fallback Images
-    const fallbackImages = [
-        "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
-        "https://images.metmuseum.org/CRDImages/ep/original/DP146468.jpg",
-        "https://images.metmuseum.org/CRDImages/ep/original/DT1502_4.jpg",
-        "https://images.metmuseum.org/CRDImages/ep/original/DP134265.jpg",
-        "https://images.metmuseum.org/CRDImages/ep/original/DP-20220-001.jpg"
+    // 3. Fallback: Curated Open Access Green Nature/Forest/Scenery Masterpieces (NO HUMANS)
+    const curatedGreenNatureArtworks = [
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
+            title: "Bridge over a Pond of Water Lilies",
+            artistDisplayName: "Claude Monet",
+            objectDate: "1899",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DT1502_4.jpg",
+            title: "Water Lilies",
+            artistDisplayName: "Claude Monet",
+            objectDate: "1919",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DT1562.jpg",
+            title: "Wheat Field with Cypresses",
+            artistDisplayName: "Vincent van Gogh",
+            objectDate: "1889",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-20401-001.jpg",
+            title: "Cypresses",
+            artistDisplayName: "Vincent van Gogh",
+            objectDate: "1889",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-19501-001.jpg",
+            title: "Mont Sainte-Victoire and the Viaduct of the Arc River Valley",
+            artistDisplayName: "Paul Cézanne",
+            objectDate: "1882–1885",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-14285-001.jpg",
+            title: "The Beeches",
+            artistDisplayName: "Asher Brown Durand",
+            objectDate: "1845",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-14141-001.jpg",
+            title: "Wivenhoe Park, Essex",
+            artistDisplayName: "John Constable",
+            objectDate: "1816",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP146468.jpg",
+            title: "The Tropical Forest with Monkeys",
+            artistDisplayName: "Henri Rousseau",
+            objectDate: "1910",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP134265.jpg",
+            title: "The Source of the Loue",
+            artistDisplayName: "Gustave Courbet",
+            objectDate: "1864",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-20220-001.jpg",
+            title: "The Four Trees",
+            artistDisplayName: "Claude Monet",
+            objectDate: "1891",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-14288-001.jpg",
+            title: "The Banks of the Oise",
+            artistDisplayName: "Charles François Daubigny",
+            objectDate: "1863",
+            medium: "Oil on canvas"
+        },
+        {
+            primaryImageSmall: "https://images.metmuseum.org/CRDImages/ep/original/DP-14299-001.jpg",
+            title: "Stepping Stones, Osny",
+            artistDisplayName: "Camille Pissarro",
+            objectDate: "1883",
+            medium: "Oil on canvas"
+        }
     ];
-    return {
-        primaryImageSmall: fallbackImages[Math.floor(Math.random() * fallbackImages.length)],
-        title: "Classic Landscape",
-        artistDisplayName: "Unknown Artist",
-        objectDate: "19th Century",
-        medium: "Oil on canvas"
-    };
+    return curatedGreenNatureArtworks[Math.floor(Math.random() * curatedGreenNatureArtworks.length)];
 }
 
 async function initArtworkBackground() {
@@ -730,20 +840,8 @@ async function initArtworkBackground() {
         await createGlobalLoader();
     }
     
-    try {
-        const stored = sessionStorage.getItem('siteArtworkData');
-        if (stored && !isReload) {
-            artworkData = JSON.parse(stored);
-            wasCached = true;
-        }
-    } catch(e) {}
-
-    if (!artworkData) {
-        artworkData = await fetchArtworkWithFallbacks();
-        if (artworkData) {
-            sessionStorage.setItem('siteArtworkData', JSON.stringify(artworkData));
-        }
-    }
+    artworkData = await fetchArtworkWithFallbacks();
+    window.currentArtworkData = artworkData;
 
     if (artworkData) {
         window.dispatchEvent(new CustomEvent('artworkDataLoaded', { detail: artworkData }));

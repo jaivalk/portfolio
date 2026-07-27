@@ -174,8 +174,9 @@ html.has-visited .handwritten {
   align-items: center;
   text-align: center;
   gap: 3rem;
-  min-height: 100vh;
+  height: 100vh;
   justify-content: center;
+  margin: 0 auto;
   position: relative;
   z-index: 5;
 }
@@ -576,10 +577,14 @@ img:not(.enter-fish-bg):not(.fish-svg-bg):hover {
 
 /* Marquee Styles */
 .marquee-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   max-width: 550px;
+  padding: 0.75rem 0;
   overflow: hidden;
-  position: relative;
   display: flex;
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
@@ -587,6 +592,7 @@ img:not(.enter-fish-bg):not(.fish-svg-bg):hover {
   letter-spacing: -0.02em;
   mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  z-index: 1001;
 }
 
 @media (max-width: 768px) {

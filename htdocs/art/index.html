@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://jaival.nfy.fyi/art/">
@@ -9,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Caveat:wght@700&family=Oranienbaum&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="stylesheet" href="../styles.css?v=6">
+  <link rel="stylesheet" href="../styles.css?v=20260727_nocache">
   <script>
     document.documentElement.style.setProperty('--bg-color', '#000000');
     document.documentElement.style.setProperty('--text-color', '#F3E5AB');
@@ -76,9 +79,9 @@
     <footer>
       <a href="../home">home</a>
       <a href="../work">work</a>
-      <a href="../writing">writing</a>
       <a href="../who-am-i">who am i</a>
       <a href="../certificates">certificates</a>
+      <a href="../writing">writing</a>
     </footer>
                 <div class="marquee-container">
       <div class="marquee-content">
@@ -121,7 +124,7 @@
     </div>
   </div>
 
-  <script src="../shared.js?v=8"></script>
+  <script src="../shared.js?v=20260727_nocache"></script>
   <script>
       function applyArtworkData(artworkData) {
           if (!artworkData) return;
@@ -195,11 +198,8 @@
           isReload = true;
       }
       
-      if (!isReload) {
-          const stored = sessionStorage.getItem('siteArtworkData');
-          if (stored) {
-              applyArtworkData(JSON.parse(stored));
-          }
+      if (window.currentArtworkData) {
+          applyArtworkData(window.currentArtworkData);
       }
   </script>
 </body>
